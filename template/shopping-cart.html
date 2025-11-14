@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - JERRY'S</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Free Shipping Banner */
+        .shipping-banner {
+            background-color: var(--fire-brick);
+            padding: 1.2rem 5%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .shipping-text {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .shipping-timer {
+            color: var(--golden-brown);
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 3rem 5%;
+            background: linear-gradient(180deg, var(--jet) 0%, var(--black) 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            color: var(--white);
+            letter-spacing: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-count {
+            color: var(--cinereous);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            padding: 3rem 5%;
+            background-color: var(--black);
+        }
+
+        .cart-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cart-item {
+            background-color: var(--jet);
+            border: 1px solid var(--taupe);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            border-color: var(--beaver);
+        }
+
+        .item-image {
+            width: 150px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            opacity: 0.5;
+            border: 1px solid var(--taupe);
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .item-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--white);
+            letter-spacing: 3px;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--cinereous);
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .meta-label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .item-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--fire-brick);
+            letter-spacing: 2px;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background-color: var(--taupe);
+            border: 1px solid var(--cinereous);
+            padding: 0.5rem;
+        }
+
+        .qty-button {
+            width: 35px;
+            height: 35px;
+            background-color: var(--jet);
+            color: var(--white);
+            border: 1px solid var(--cinereous);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-button:hover {
+            background-color: var(--beaver);
+            border-color: var(--beaver);
+        }
+
+        .qty-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-button {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .remove-button:hover {
+            color: var(--fire-brick);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background-color: var(--jet);
+            border: 2px solid var(--taupe);
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .summary-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--taupe);
+        }
+
+        /* Free Shipping Progress */
+        .shipping-progress {
+            background-color: var(--taupe);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--golden-brown);
+        }
+
+        .progress-text {
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .progress-text.achieved {
+            color: var(--golden-brown);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 25px;
+            background-color: var(--van-dyke);
+            border: 1px solid var(--cinereous);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--fire-brick) 0%, var(--golden-brown) 100%);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            color: var(--white);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .progress-amount {
+            text-align: center;
+            margin-top: 0.8rem;
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Summary Details */
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--taupe);
+        }
+
+        .summary-label {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .summary-line.shipping .summary-value {
+            color: var(--golden-brown);
+        }
+
+        .summary-line.total {
+            border-bottom: none;
+            border-top: 2px solid var(--beaver);
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+        }
+
+        .summary-line.total .summary-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        .summary-line.total .summary-value {
+            font-size: 2rem;
+            color: var(--fire-brick);
+        }
+
+        /* Checkout Button */
+        .checkout-button {
+            width: 100%;
+            padding: 1.5rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            border: 3px solid var(--golden-brown);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .checkout-button:hover {
+            background-color: var(--fire-brick-2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(172, 54, 45, 0.5);
+        }
+
+        .continue-shopping {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .continue-shopping a {
+            color: var(--beaver);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .continue-shopping a:hover {
+            color: var(--fire-brick);
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            padding: 5rem 2rem;
+            background-color: var(--jet);
+            border: 1px solid var(--taupe);
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .empty-cart-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-text {
+            color: var(--cinereous);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .shop-button {
+            display: inline-block;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 1rem 3rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border: 2px solid var(--golden-brown);
+            transition: all 0.3s ease;
+            letter-spacing: 3px;
+        }
+
+        .shop-button:hover {
+            background-color: var(--fire-brick-2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(172, 54, 45, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .cart-item {
+                grid-template-columns: 100px 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .item-image {
+                width: 100px;
+                height: 120px;
+                font-size: 2.5rem;
+            }
+
+            .item-actions {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .item-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="homepage-v2.html">Home</a></li>
+            <li><a href="collections-page.html">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Track Order</a></li>
+        </ul>
+        <div class="cart-icon">
+            <span style="font-size: 1.5rem; color: var(--fire-brick);">🛒</span>
+            <span class="cart-badge" id="cartBadge">3</span>
+        </div>
+    </nav>
+
+    <!-- Free Shipping Banner -->
+    <div class="shipping-banner">
+        <span class="shipping-text">🚚 FREE U.S. SHIPPING ON ORDERS OVER $100 WHILE COLLECTION IS LIVE!</span>
+        <span class="shipping-timer">9D 5H 31M 17S</span>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1 class="page-title">YOUR CART</h1>
+        <p class="item-count"><span id="itemCount">3</span> items in your cart</p>
+    </section>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="cart-container">
+            <!-- Cart Items -->
+            <div class="cart-items" id="cartItems">
+                <!-- Cart Item 1 -->
+                <div class="cart-item" data-price="245" data-id="1">
+                    <div class="item-image">🧥</div>
+                    <div class="item-details">
+                        <h3 class="item-name">DISTRESSED PUFFER</h3>
+                        <div class="item-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Color:</span>
+                                <span>Cream</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Size:</span>
+                                <span>M</span>
+                            </div>
+                        </div>
+                        <div class="item-price">$245.00</div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button class="qty-button qty-decrease">-</button>
+                            <span class="qty-value">1</span>
+                            <button class="qty-button qty-increase">+</button>
+                        </div>
+                        <a class="remove-button">Remove</a>
+                    </div>
+                </div>
+
+                <!-- Cart Item 2 -->
+                <div class="cart-item" data-price="65" data-id="2">
+                    <div class="item-image">👕</div>
+                    <div class="item-details">
+                        <h3 class="item-name">DECAY GRAPHIC TEE</h3>
+                        <div class="item-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Color:</span>
+                                <span>Black</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Size:</span>
+                                <span>L</span>
+                            </div>
+                        </div>
+                        <div class="item-price">$65.00</div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button class="qty-button qty-decrease">-</button>
+                            <span class="qty-value">2</span>
+                            <button class="qty-button qty-increase">+</button>
+                        </div>
+                        <a class="remove-button">Remove</a>
+                    </div>
+                </div>
+
+                <!-- Cart Item 3 -->
+                <div class="cart-item" data-price="185" data-id="3">
+                    <div class="item-image">👖</div>
+                    <div class="item-details">
+                        <h3 class="item-name">CONCRETE WASH JEANS</h3>
+                        <div class="item-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Color:</span>
+                                <span>Washed Grey</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Size:</span>
+                                <span>32</span>
+                            </div>
+                        </div>
+                        <div class="item-price">$185.00</div>
+                    </div>
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button class="qty-button qty-decrease">-</button>
+                            <span class="qty-value">1</span>
+                            <button class="qty-button qty-increase">+</button>
+                        </div>
+                        <a class="remove-button">Remove</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2 class="summary-title">ORDER SUMMARY</h2>
+
+                <!-- Free Shipping Progress -->
+                <div class="shipping-progress">
+                    <p class="progress-text" id="progressText">
+                        Add <strong>$0.00</strong> more to qualify for free shipping! 🎉
+                    </p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBar" style="width: 0%;">
+                            <span class="progress-percentage" id="progressPercentage">0%</span>
+                        </div>
+                    </div>
+                    <p class="progress-amount" id="progressAmount">$0 / $100</p>
+                </div>
+
+                <!-- Summary Lines -->
+                <div class="summary-line">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value" id="subtotal">$0.00</span>
+                </div>
+                <div class="summary-line shipping">
+                    <span class="summary-label">Shipping</span>
+                    <span class="summary-value" id="shippingCost">$15.00</span>
+                </div>
+                <div class="summary-line total">
+                    <span class="summary-label">Total</span>
+                    <span class="summary-value" id="totalCost">$0.00</span>
+                </div>
+
+                <!-- Checkout Button -->
+                <button class="checkout-button">PROCEED TO CHECKOUT</button>
+                <div class="continue-shopping">
+                    <a href="collections-page.html">← Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        const FREE_SHIPPING_THRESHOLD = 100;
+        const STANDARD_SHIPPING = 15;
+
+        function updateCart() {
+            const cartItems = document.querySelectorAll('.cart-item');
+            let subtotal = 0;
+            let itemCount = 0;
+
+            cartItems.forEach(item => {
+                const price = parseFloat(item.dataset.price);
+                const quantity = parseInt(item.querySelector('.qty-value').textContent);
+                subtotal += price * quantity;
+                itemCount += quantity;
+            });
+
+            // Update subtotal
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+
+            // Calculate shipping
+            const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING;
+            document.getElementById('shippingCost').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+
+            // Update total
+            const total = subtotal + shipping;
+            document.getElementById('totalCost').textContent = `$${total.toFixed(2)}`;
+
+            // Update item count
+            document.getElementById('itemCount').textContent = itemCount;
+            document.getElementById('cartBadge').textContent = itemCount;
+
+            // Update free shipping progress
+            updateShippingProgress(subtotal);
+        }
+
+        function updateShippingProgress(subtotal) {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressAmount = document.getElementById('progressAmount');
+
+            const percentage = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
+            const remaining = Math.max(FREE_SHIPPING_THRESHOLD - subtotal, 0);
+
+            progressBar.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${Math.round(percentage)}%`;
+            progressAmount.textContent = `$${subtotal.toFixed(0)} / $${FREE_SHIPPING_THRESHOLD}`;
+
+            if (remaining > 0) {
+                progressText.innerHTML = `Add <strong>$${remaining.toFixed(2)}</strong> more to qualify for free shipping! 🚚`;
+                progressText.classList.remove('achieved');
+            } else {
+                progressText.innerHTML = `🎉 You've qualified for <strong>FREE SHIPPING</strong>! 🎉`;
+                progressText.classList.add('achieved');
+            }
+        }
+
+        // Quantity controls
+        document.querySelectorAll('.qty-increase').forEach(button => {
+            button.addEventListener('click', function() {
+                const qtyValue = this.parentElement.querySelector('.qty-value');
+                const currentQty = parseInt(qtyValue.textContent);
+                qtyValue.textContent = currentQty + 1;
+                updateCart();
+            });
+        });
+
+        document.querySelectorAll('.qty-decrease').forEach(button => {
+            button.addEventListener('click', function() {
+                const qtyValue = this.parentElement.querySelector('.qty-value');
+                const currentQty = parseInt(qtyValue.textContent);
+                if (currentQty > 1) {
+                    qtyValue.textContent = currentQty - 1;
+                    updateCart();
+                }
+            });
+        });
+
+        // Remove item
+        document.querySelectorAll('.remove-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const cartItem = this.closest('.cart-item');
+                cartItem.style.opacity = '0';
+                cartItem.style.transform = 'translateX(-100%)';
+                
+                setTimeout(() => {
+                    cartItem.remove();
+                    updateCart();
+                    
+                    // Check if cart is empty
+                    if (document.querySelectorAll('.cart-item').length === 0) {
+                        showEmptyCart();
+                    }
+                }, 300);
+            });
+        });
+
+        function showEmptyCart() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = `
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛒</div>
+                    <h2 class="empty-cart-title">YOUR CART IS EMPTY</h2>
+                    <p class="empty-cart-text">Time to fill it up with some fresh fits!</p>
+                    <a href="collections-page.html" class="shop-button">SHOP COLLECTIONS</a>
+                </div>
+            `;
+        }
+
+        // Initialize cart
+        updateCart();
+    </script>
+
+</body>
+</html>

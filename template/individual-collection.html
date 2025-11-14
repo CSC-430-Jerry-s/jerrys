@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Decay - Fall 2025 - JERRY'S</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 1.5rem 5%;
+            background-color: var(--jet);
+        }
+
+        .breadcrumb a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--beaver);
+        }
+
+        .breadcrumb span {
+            color: var(--cinereous);
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb .current {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Collection Header */
+        .collection-header {
+            padding: 5rem 5% 3rem 5%;
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--golden-brown) 50%, var(--taupe) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collection-header::before {
+            content: 'FALL';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15rem;
+            color: rgba(0, 0, 0, 0.05);
+            letter-spacing: 20px;
+            z-index: 0;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .collection-badge {
+            display: inline-block;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .collection-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            color: var(--white);
+            letter-spacing: 10px;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .collection-tagline {
+            font-size: 1.5rem;
+            color: var(--black);
+            font-style: italic;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .collection-description {
+            color: var(--van-dyke);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .collection-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--black);
+            letter-spacing: 2px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--van-dyke);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        /* Filter/Sort Bar */
+        .filter-bar {
+            padding: 2rem 5%;
+            background-color: var(--jet);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-count {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            background-color: var(--taupe);
+            color: var(--white);
+            border: 1px solid var(--cinereous);
+            padding: 0.6rem 1.5rem;
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: var(--beaver);
+            border-color: var(--beaver);
+        }
+
+        .filter-button.active {
+            background-color: var(--fire-brick);
+            border-color: var(--fire-brick);
+        }
+
+        /* Products Grid */
+        .products-section {
+            padding: 4rem 5%;
+            background-color: var(--black);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background-color: var(--jet);
+            border: 1px solid var(--taupe);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--beaver);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, var(--taupe) 0%, var(--van-dyke) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            opacity: 0.2;
+        }
+
+        /* Different placeholder styles */
+        .product-card:nth-child(3n+1) .product-image {
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+        }
+
+        .product-card:nth-child(3n+2) .product-image {
+            background: linear-gradient(135deg, var(--golden-brown) 0%, var(--taupe) 100%);
+        }
+
+        .product-card:nth-child(3n+3) .product-image {
+            background: linear-gradient(135deg, var(--cinereous) 0%, var(--van-dyke) 100%);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 0.4rem 0.8rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        .product-badge.sold-out {
+            background-color: var(--cinereous);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--cinereous);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .product-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-description {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .product-link {
+            color: var(--beaver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .product-link:hover {
+            color: var(--fire-brick);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .collection-name {
+                font-size: 3rem;
+                letter-spacing: 6px;
+            }
+
+            .collection-tagline {
+                font-size: 1.2rem;
+            }
+
+            .collection-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .product-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="homepage-v2.html">Home</a></li>
+            <li><a href="collections-page.html" class="active">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Track Order</a></li>
+        </ul>
+        <div class="cart-icon">
+            <span style="font-size: 1.5rem; color: var(--cinereous);">🛒</span>
+            <span class="cart-badge">0</span>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="homepage-v2.html">Home</a>
+        <span>›</span>
+        <a href="collections-page.html">Collections</a>
+        <span>›</span>
+        <span class="current">Urban Decay</span>
+    </div>
+
+    <!-- Collection Header -->
+    <section class="collection-header">
+        <div class="header-content">
+            <div class="collection-badge">FALL 2025 • LIVE NOW</div>
+            <h1 class="collection-name">URBAN DECAY</h1>
+            <p class="collection-tagline">"Concrete Jungle Chronicles"</p>
+            <p class="collection-description">
+                Born from the streets, refined by the underground. This collection captures the raw energy 
+                of urban life—distressed fabrics, bold graphics, and layered silhouettes that tell a story 
+                of resilience and rebellion.
+            </p>
+            <div class="collection-stats">
+                <div class="stat-item">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Items</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">9D</div>
+                    <div class="stat-label">Time Left</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">FREE</div>
+                    <div class="stat-label">Shipping ($100+)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="results-count">Showing 24 items</div>
+        <div class="filters">
+            <button class="filter-button active">All</button>
+            <button class="filter-button">Outerwear</button>
+            <button class="filter-button">Hoodies</button>
+            <button class="filter-button">Denim</button>
+            <button class="filter-button">Tees</button>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge">NEW</div>
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Outerwear</div>
+                    <h3 class="product-name">DISTRESSED PUFFER</h3>
+                    <p class="product-description">Oversized sherpa-lined puffer with intentional wear details</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">👕</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Tees</div>
+                    <h3 class="product-name">DECAY GRAPHIC TEE</h3>
+                    <p class="product-description">Heavy cotton tee with screen-printed urban artwork</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge">NEW</div>
+                    <div class="image-placeholder">👖</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Denim</div>
+                    <h3 class="product-name">CONCRETE WASH JEANS</h3>
+                    <p class="product-description">Wide-leg denim with custom distressed pattern</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Hoodies</div>
+                    <h3 class="product-name">URBAN HOODIE</h3>
+                    <p class="product-description">Heavyweight fleece with embroidered details</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge">LOW STOCK</div>
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Outerwear</div>
+                    <h3 class="product-name">LEATHER MOTO JACKET</h3>
+                    <p class="product-description">Premium vegan leather with asymmetric zip</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">👕</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Tees</div>
+                    <h3 class="product-name">SKYLINE LONG SLEEVE</h3>
+                    <p class="product-description">Fitted long sleeve with city graphic placement</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 7 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">👖</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Denim</div>
+                    <h3 class="product-name">PAINTER CARGO PANTS</h3>
+                    <p class="product-description">Utility-inspired with multiple pockets and paint splatter</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 8 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge">NEW</div>
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Hoodies</div>
+                    <h3 class="product-name">CHAINS HOODIE</h3>
+                    <p class="product-description">Oversized fit with chain embellishment detail</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 9 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">👕</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Tees</div>
+                    <h3 class="product-name">VINTAGE WASH TEE</h3>
+                    <p class="product-description">Acid wash effect with retro logo print</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 10 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Outerwear</div>
+                    <h3 class="product-name">UTILITY VEST</h3>
+                    <p class="product-description">Multi-pocket tactical vest in washed canvas</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 11 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="product-badge sold-out">SOLD OUT</div>
+                    <div class="image-placeholder">👖</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Denim</div>
+                    <h3 class="product-name">GRAFFITI DENIM JACKET</h3>
+                    <p class="product-description">Hand-painted denim with unique artwork</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+
+            <!-- Product 12 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Hoodies</div>
+                    <h3 class="product-name">ZIP-UP TECH HOODIE</h3>
+                    <p class="product-description">Technical fabric with water-resistant finish</p>
+                    <a href="#" class="product-link">View Details →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const productCards = document.querySelectorAll('.product-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filterCategory = this.textContent.toLowerCase().trim();
+                
+                // Filter products (basic implementation)
+                if (filterCategory === 'all') {
+                    productCards.forEach(card => card.style.display = 'block');
+                } else {
+                    productCards.forEach(card => {
+                        const category = card.querySelector('.product-category').textContent.toLowerCase();
+                        if (category === filterCategory) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+
+        // Product card click handler
+        productCards.forEach(card => {
+            card.addEventListener('click', function() {
+                console.log('Navigating to product detail:', this.querySelector('.product-name').textContent);
+                // In production, would navigate to product detail page
+            });
+        });
+    </script>
+
+</body>
+</html>

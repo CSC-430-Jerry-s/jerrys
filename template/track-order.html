@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - JERRY'S</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 4rem 5% 3rem 5%;
+            background: linear-gradient(180deg, var(--jet) 0%, var(--black) 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--white);
+            letter-spacing: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            color: var(--beaver);
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 4rem 5%;
+            background-color: var(--black);
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .search-description {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1.5rem;
+            background-color: var(--jet);
+            border: 2px solid var(--taupe);
+            color: var(--white);
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--beaver);
+        }
+
+        .search-input::placeholder {
+            color: var(--cinereous);
+        }
+
+        .search-button {
+            padding: 1.5rem 3rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            border: 2px solid var(--golden-brown);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--fire-brick-2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(172, 54, 45, 0.4);
+        }
+
+        .search-help {
+            text-align: center;
+            color: var(--cinereous);
+            font-size: 0.85rem;
+        }
+
+        .search-help a {
+            color: var(--beaver);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .search-help a:hover {
+            color: var(--fire-brick);
+        }
+
+        /* Order Status Section */
+        .order-status-section {
+            padding: 3rem 5%;
+            background-color: var(--jet);
+            display: none;
+        }
+
+        .order-status-section.show {
+            display: block;
+        }
+
+        .status-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .order-header {
+            background-color: var(--taupe);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--beaver);
+        }
+
+        .order-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .order-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .info-label {
+            color: var(--cinereous);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            padding: 0.4rem 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* Tracking Timeline */
+        .tracking-timeline {
+            background-color: var(--black);
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            background: linear-gradient(180deg, var(--golden-brown) 0%, var(--cinereous) 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--cinereous);
+            border: 3px solid var(--jet);
+        }
+
+        .timeline-item.active .timeline-dot {
+            background-color: var(--golden-brown);
+            box-shadow: 0 0 15px rgba(138, 108, 38, 0.6);
+        }
+
+        .timeline-item.completed .timeline-dot {
+            background-color: var(--fire-brick);
+        }
+
+        .timeline-date {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .timeline-title-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-description {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .timeline-item.active .timeline-title-text {
+            color: var(--golden-brown);
+        }
+
+        /* Order Items */
+        .order-items {
+            background-color: var(--black);
+            padding: 2rem;
+        }
+
+        .items-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+        }
+
+        .item-row {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--taupe);
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            opacity: 0.5;
+            border: 1px solid var(--taupe);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-details {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+        }
+
+        .item-quantity {
+            color: var(--beaver);
+            font-weight: 600;
+        }
+
+        /* Collection Updates Section */
+        .updates-section {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, var(--black) 0%, var(--jet) 100%);
+            border-top: 1px solid var(--taupe);
+        }
+
+        .updates-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .updates-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .updates-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .updates-subtitle {
+            color: var(--cinereous);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .update-card {
+            background-color: var(--jet);
+            border: 2px solid var(--taupe);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .update-card:hover {
+            border-color: var(--beaver);
+            transform: translateY(-5px);
+        }
+
+        .update-badge {
+            display: inline-block;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .update-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--white);
+            letter-spacing: 3px;
+            margin-bottom: 0.8rem;
+        }
+
+        .update-date {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .update-content {
+            color: var(--beaver);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .order-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .item-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="homepage-v2.html">Home</a></li>
+            <li><a href="collections-page.html">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#" class="active">Track Order</a></li>
+        </ul>
+        <div class="cart-icon">
+            <span style="font-size: 1.5rem; color: var(--cinereous);">🛒</span>
+            <span class="cart-badge">0</span>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1 class="page-title">TRACK YOUR ORDER</h1>
+        <p class="page-subtitle">Stay updated on your order status and collection news</p>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <h2 class="search-title">FIND YOUR ORDER</h2>
+            <p class="search-description">
+                Enter your order number below to track your package. You can find your order number in your confirmation email.
+            </p>
+            <form class="search-form" id="searchForm">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="orderNumberInput"
+                    placeholder="Enter Order Number (e.g., JRY-2025-001234)"
+                    required
+                />
+                <button type="submit" class="search-button">TRACK</button>
+            </form>
+            <p class="search-help">
+                Need help? <a href="#">Contact Support</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Order Status Section (Hidden initially) -->
+    <section class="order-status-section" id="orderStatusSection">
+        <div class="status-container">
+            <!-- Order Header -->
+            <div class="order-header">
+                <div class="order-number">Order #JRY-2025-001234</div>
+                <div class="order-info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="status-badge">OUT FOR DELIVERY</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Order Date</span>
+                        <span class="info-value">October 10, 2025</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Estimated Delivery</span>
+                        <span class="info-value">October 20, 2025</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Carrier</span>
+                        <span class="info-value">USPS Priority</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tracking Number</span>
+                        <span class="info-value">9400111899562123456789</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Timeline -->
+            <div class="tracking-timeline">
+                <h3 class="timeline-title">SHIPPING TIMELINE</h3>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">October 10, 2025 - 2:30 PM</div>
+                        <div class="timeline-title-text">Order Placed</div>
+                        <div class="timeline-description">Your order has been confirmed and is being prepared.</div>
+                    </div>
+
+                    <div class="timeline-item completed">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">October 12, 2025 - 9:15 AM</div>
+                        <div class="timeline-title-text">Processing Complete</div>
+                        <div class="timeline-description">Your order has been packed and is ready to ship.</div>
+                    </div>
+
+                    <div class="timeline-item completed">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">October 13, 2025 - 4:45 PM</div>
+                        <div class="timeline-title-text">Shipped</div>
+                        <div class="timeline-description">Your package has been picked up by USPS and is on its way.</div>
+                    </div>
+
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">October 19, 2025 - 8:20 AM</div>
+                        <div class="timeline-title-text">Out for Delivery</div>
+                        <div class="timeline-description">Your package is with the carrier and will be delivered today.</div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">Estimated: October 20, 2025</div>
+                        <div class="timeline-title-text">Delivered</div>
+                        <div class="timeline-description">Your package will be delivered to your address.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="order-items">
+                <h3 class="items-title">YOUR ITEMS (3)</h3>
+                
+                <div class="item-row">
+                    <div class="item-image">🧥</div>
+                    <div class="item-info">
+                        <div class="item-name">DISTRESSED PUFFER</div>
+                        <div class="item-details">Color: Cream • Size: M • <span class="item-quantity">Qty: 1</span></div>
+                    </div>
+                </div>
+
+                <div class="item-row">
+                    <div class="item-image">👕</div>
+                    <div class="item-info">
+                        <div class="item-name">DECAY GRAPHIC TEE</div>
+                        <div class="item-details">Color: Black • Size: L • <span class="item-quantity">Qty: 2</span></div>
+                    </div>
+                </div>
+
+                <div class="item-row">
+                    <div class="item-image">👖</div>
+                    <div class="item-info">
+                        <div class="item-name">CONCRETE WASH JEANS</div>
+                        <div class="item-details">Color: Washed Grey • Size: 32 • <span class="item-quantity">Qty: 1</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Updates Section -->
+    <section class="updates-section">
+        <div class="updates-container">
+            <div class="updates-header">
+                <h2 class="updates-title">COLLECTION UPDATES</h2>
+                <p class="updates-subtitle">Stay in the loop with the latest from JERRY'S</p>
+            </div>
+
+            <div class="updates-grid">
+                <!-- Update 1 -->
+                <div class="update-card">
+                    <span class="update-badge">LIVE NOW</span>
+                    <h3 class="update-title">FALL 2025: URBAN DECAY</h3>
+                    <p class="update-date">Posted: October 1, 2025</p>
+                    <p class="update-content">
+                        Our Fall collection is LIVE! 24 exclusive pieces available for the next 9 days. 
+                        Free shipping on orders over $100 while the collection is active. Don't sleep on this drop!
+                    </p>
+                </div>
+
+                <!-- Update 2 -->
+                <div class="update-card">
+                    <span class="update-badge">SHIPPING UPDATE</span>
+                    <h3 class="update-title">FASTER FULFILLMENT</h3>
+                    <p class="update-date">Posted: October 5, 2025</p>
+                    <p class="update-content">
+                        We've partnered with a new fulfillment center to get your orders out faster. 
+                        All Fall collection orders are now shipping within 1-2 business days!
+                    </p>
+                </div>
+
+                <!-- Update 3 -->
+                <div class="update-card">
+                    <span class="update-badge">COMING SOON</span>
+                    <h3 class="update-title">WINTER 2025 TEASER</h3>
+                    <p class="update-date">Posted: October 15, 2025</p>
+                    <p class="update-content">
+                        Winter is coming. Expect heavy outerwear, layered fits, and cold-weather essentials. 
+                        Mark your calendars for December 1st when the Winter collection drops.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const orderNumberInput = document.getElementById('orderNumberInput');
+        const orderStatusSection = document.getElementById('orderStatusSection');
+
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const orderNumber = orderNumberInput.value.trim();
+            
+            if (orderNumber) {
+                // Simulate order lookup with a slight delay
+                setTimeout(() => {
+                    // Show order status section
+                    orderStatusSection.classList.add('show');
+                    
+                    // Scroll to order status
+                    orderStatusSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 300);
+            }
+        });
+
+        // Demo: Show order status immediately for testing
+        // Uncomment to test without entering order number
+        // orderStatusSection.classList.add('show');
+    </script>
+
+</body>
+</html>

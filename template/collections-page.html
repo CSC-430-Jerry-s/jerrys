@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections - JERRY'S Streetwear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 4rem 5% 3rem 5%;
+            text-align: center;
+            background: linear-gradient(180deg, var(--black) 0%, var(--jet) 100%);
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--white);
+            letter-spacing: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            color: var(--beaver);
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Core Collection Section */
+        .core-section {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, var(--jet) 0%, var(--black) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            padding: 0.5rem 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            letter-spacing: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            color: var(--cinereous);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .core-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--jet);
+            border: 3px solid var(--golden-brown);
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .core-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(138, 108, 38, 0.1) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .core-card:hover::before {
+            opacity: 1;
+        }
+
+        .core-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(138, 108, 38, 0.3);
+        }
+
+        .core-preview {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-box {
+            width: 120px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--taupe) 0%, var(--van-dyke) 100%);
+            border: 1px solid var(--cinereous);
+            position: relative;
+        }
+
+        .preview-box::after {
+            content: '👕';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .core-card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .core-card-tagline {
+            color: var(--golden-brown);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .core-card-description {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .collection-button {
+            display: inline-block;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            padding: 1rem 3rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border: none;
+            transition: all 0.3s ease;
+            letter-spacing: 3px;
+            cursor: pointer;
+        }
+
+        .collection-button:hover {
+            background-color: var(--beaver);
+            transform: scale(1.05);
+        }
+
+        /* Seasonal Collections Section */
+        .seasonal-section {
+            padding: 5rem 5%;
+            background-color: var(--black);
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .collection-tile {
+            background: var(--jet);
+            border: 2px solid var(--taupe);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .collection-tile:hover {
+            transform: translateY(-8px);
+            border-color: var(--beaver);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Active/Current Collection Highlight */
+        .collection-tile.active {
+            border: 3px solid var(--fire-brick);
+            box-shadow: 0 0 30px rgba(172, 54, 45, 0.3);
+        }
+
+        .collection-tile.active::after {
+            content: 'LIVE NOW';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            z-index: 10;
+        }
+
+        .collection-tile.active:hover {
+            border-color: var(--fire-brick);
+            box-shadow: 0 15px 50px rgba(172, 54, 45, 0.5);
+        }
+
+        .tile-image-area {
+            height: 300px;
+            background: linear-gradient(135deg, var(--taupe) 0%, var(--van-dyke) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tile-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.1);
+            letter-spacing: 8px;
+        }
+
+        /* Different gradient for each season */
+        .tile-fall .tile-image-area {
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--golden-brown) 100%);
+        }
+
+        .tile-winter .tile-image-area {
+            background: linear-gradient(135deg, var(--cinereous) 0%, var(--taupe) 100%);
+        }
+
+        .tile-spring .tile-image-area {
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+        }
+
+        .tile-summer .tile-image-area {
+            background: linear-gradient(135deg, var(--golden-brown) 0%, var(--beaver) 100%);
+        }
+
+        .tile-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .tile-season {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            color: var(--cinereous);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .collection-tile.active .tile-season {
+            color: var(--fire-brick);
+        }
+
+        .tile-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .tile-tagline {
+            color: var(--beaver);
+            font-size: 0.95rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .tile-info {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--taupe);
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--cinereous);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .collections-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .core-preview {
+                gap: 0.5rem;
+            }
+
+            .preview-box {
+                width: 90px;
+                height: 120px;
+            }
+
+            .tile-image-area {
+                height: 250px;
+            }
+
+            .tile-placeholder {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="homepage-v2.html">Home</a></li>
+            <li><a href="#" class="active">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Track Order</a></li>
+        </ul>
+        <div class="cart-icon">
+            <span style="font-size: 1.5rem; color: var(--cinereous);">🛒</span>
+            <span class="cart-badge">0</span>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1 class="page-title">COLLECTIONS</h1>
+        <p class="page-subtitle">Explore seasonal drops and timeless essentials</p>
+    </section>
+
+    <!-- Seasonal Collections Section -->
+    <section class="seasonal-section">
+        <div class="section-header">
+            <div class="section-badge">SEASONAL DROPS</div>
+            <h2 class="section-title">LIMITED COLLECTIONS</h2>
+            <p class="section-description">
+                Exclusive quarterly releases. Each collection tells a story, available for 30 days.
+            </p>
+        </div>
+
+        <div class="collections-grid">
+            <!-- Active Collection - Fall 2025 -->
+            <div class="collection-tile tile-fall active">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">FALL</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">FALL 2025</div>
+                    <h3 class="tile-name">URBAN DECAY</h3>
+                    <p class="tile-tagline">"Concrete Jungle Chronicles"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">24</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Time Left</div>
+                            <div class="info-value">9D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summer 2025 -->
+            <div class="collection-tile tile-summer">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">SUMMER</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">SUMMER 2025</div>
+                    <h3 class="tile-name">HEAT WAVE</h3>
+                    <p class="tile-tagline">"Sun-Soaked Streets"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">18</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">SOLD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spring 2025 -->
+            <div class="collection-tile tile-spring">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">SPRING</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">SPRING 2025</div>
+                    <h3 class="tile-name">REBIRTH</h3>
+                    <p class="tile-tagline">"Fresh Starts, Bold Moves"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">21</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">LIVE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Winter 2024 -->
+            <div class="collection-tile tile-winter">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">WINTER</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">WINTER 2024</div>
+                    <h3 class="tile-name">FROST BITE</h3>
+                    <p class="tile-tagline">"Cold Days, Hot Fits"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">16</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">LIVE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fall 2024 -->
+            <div class="collection-tile tile-fall">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">FALL</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">FALL 2024</div>
+                    <h3 class="tile-name">DYSTOPIA</h3>
+                    <p class="tile-tagline">"When the Leaves Fall"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">19</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">SOLD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summer 2024 -->
+            <div class="collection-tile tile-summer">
+                <div class="tile-image-area">
+                    <div class="tile-placeholder">SUMMER</div>
+                </div>
+                <div class="tile-content">
+                    <div class="tile-season">SUMMER 2024</div>
+                    <h3 class="tile-name">NEON NIGHTS</h3>
+                    <p class="tile-tagline">"City Lights, Summer Vibes"</p>
+                    <div class="tile-info">
+                        <div class="info-item">
+                            <div class="info-label">Items</div>
+                            <div class="info-value">22</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">LIVE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Collection Section -->
+    <section class="core-section">
+        <div class="section-header">
+            <div class="section-badge">ALWAYS AVAILABLE</div>
+            <h2 class="section-title">CORE COLLECTION</h2>
+            <p class="section-description">
+                Our signature pieces, available year-round. The foundation of every streetwear wardrobe.
+            </p>
+        </div>
+
+        <div class="core-card">
+            <div class="core-preview">
+                <div class="preview-box"></div>
+                <div class="preview-box"></div>
+                <div class="preview-box"></div>
+                <div class="preview-box"></div>
+            </div>
+            <h3 class="core-card-title">THE ESSENTIALS</h3>
+            <p class="core-card-tagline">"Built to Last, Made to Flex"</p>
+            <p class="core-card-description">
+                Classic silhouettes with modern edge. Hoodies, tees, denim, and outerwear that define the JERRY'S aesthetic. 
+                These pieces never go out of stock, never go out of style.
+            </p>
+            <a href="#" class="collection-button">SHOP CORE COLLECTION</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        // Add click handlers for collection tiles
+        document.querySelectorAll('.collection-tile').forEach(tile => {
+            tile.addEventListener('click', function() {
+                console.log('Navigating to collection:', this.querySelector('.tile-name').textContent);
+                // In production, this would navigate to the individual collection page
+            });
+        });
+
+        document.querySelector('.core-card').addEventListener('click', function() {
+            console.log('Navigating to Core Collection');
+            // In production, this would navigate to the core collection page
+        });
+    </script>
+
+</body>
+</html>

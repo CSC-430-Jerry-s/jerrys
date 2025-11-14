@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JERRY'S - Streetwear Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Free Shipping Banner */
+        .shipping-banner {
+            background-color: var(--fire-brick);
+            padding: 1.2rem 5%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .shipping-banner.hidden {
+            display: none;
+        }
+
+        .shipping-text {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .shipping-timer {
+            color: var(--golden-brown);
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 75vh;
+            min-height: 600px;
+            background: var(--black);
+            overflow: hidden;
+        }
+
+        .hero-section.hidden {
+            display: none;
+        }
+
+        .hero-carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+
+        .hero-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Stylish Placeholders */
+        .hero-placeholder {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-placeholder-1 {
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 50%, var(--taupe) 100%);
+        }
+
+        .hero-placeholder-2 {
+            background: linear-gradient(135deg, var(--black) 0%, var(--van-dyke) 50%, var(--jet) 100%);
+        }
+
+        .hero-placeholder-3 {
+            background: linear-gradient(135deg, var(--taupe) 0%, var(--golden-brown) 50%, var(--beaver) 100%);
+        }
+
+        .hero-placeholder-4 {
+            background: linear-gradient(135deg, var(--jet) 0%, var(--black) 50%, var(--fire-brick) 100%);
+        }
+
+        .hero-placeholder-5 {
+            background: linear-gradient(135deg, var(--cinereous) 0%, var(--taupe) 50%, var(--van-dyke) 100%);
+        }
+
+        .placeholder-model {
+            position: absolute;
+            width: 350px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 200px 200px 50px 50px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            backdrop-filter: blur(20px);
+        }
+
+        .placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.08);
+            letter-spacing: 12px;
+            text-align: center;
+            line-height: 0.9;
+            user-select: none;
+            z-index: 1;
+        }
+
+        .placeholder-accent {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+        .accent-1 {
+            background: var(--fire-brick);
+            top: 10%;
+            right: 15%;
+            filter: blur(60px);
+        }
+
+        .accent-2 {
+            background: var(--golden-brown);
+            bottom: 15%;
+            left: 10%;
+            filter: blur(80px);
+        }
+
+        .accent-3 {
+            background: var(--beaver);
+            top: 40%;
+            left: 20%;
+            filter: blur(70px);
+            width: 250px;
+            height: 250px;
+        }
+
+        .placeholder-product {
+            position: absolute;
+            bottom: 15%;
+            right: 10%;
+            width: 180px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+        }
+
+        .placeholder-price {
+            position: absolute;
+            bottom: 20%;
+            right: 12%;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+            z-index: 2;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(3, 5, 2, 0.9) 0%, transparent 100%);
+            padding: 4rem 5%;
+            z-index: 10;
+        }
+
+        .collection-badge {
+            display: inline-block;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            padding: 0.5rem 1.5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--white);
+            letter-spacing: 6px;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--beaver);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Carousel Controls */
+        .carousel-dots {
+            position: absolute;
+            bottom: 2rem;
+            right: 5%;
+            display: flex;
+            gap: 0.8rem;
+            z-index: 20;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--cinereous);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--fire-brick);
+            transform: scale(1.3);
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            padding: 4rem 5%;
+            text-align: center;
+            background-color: var(--jet);
+        }
+
+        .countdown-section.expanded {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, var(--black) 0%, var(--jet) 100%);
+        }
+
+        .countdown-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--beaver);
+            margin-bottom: 2rem;
+            letter-spacing: 4px;
+        }
+
+        .countdown-title.next-drop {
+            font-size: 2.5rem;
+            color: var(--fire-brick);
+            margin-bottom: 3rem;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            color: var(--white);
+            line-height: 1;
+            text-shadow: 2px 2px 8px rgba(172, 54, 45, 0.3);
+        }
+
+        .countdown-section.expanded .time-value {
+            font-size: 6rem;
+            color: var(--fire-brick);
+            text-shadow: 2px 2px 12px rgba(172, 54, 45, 0.5);
+        }
+
+        .time-label {
+            font-size: 1rem;
+            color: var(--cinereous);
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        /* Divider */
+        .divider {
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--cinereous) 50%, transparent 100%);
+            margin: 3rem auto;
+        }
+
+        .divider.hidden {
+            display: none;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 3rem 5% 5rem 5%;
+            text-align: center;
+            background-color: var(--black);
+        }
+
+        .cta-section.state2 {
+            padding: 4rem 5% 6rem 5%;
+            background: linear-gradient(180deg, var(--jet) 0%, var(--black) 100%);
+        }
+
+        .shop-button {
+            display: inline-block;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 1.5rem 5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            text-decoration: none;
+            border: 3px solid var(--golden-brown);
+            transition: all 0.3s ease;
+            letter-spacing: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shop-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--fire-brick-2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .shop-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .shop-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .shop-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(172, 54, 45, 0.5);
+            border-color: var(--fire-brick);
+        }
+
+        .shop-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Collections Preview Section */
+        .collections-preview {
+            background: linear-gradient(180deg, var(--black) 0%, var(--jet) 50%, var(--black) 100%);
+            padding: 6rem 5%;
+        }
+
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .preview-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            text-align: center;
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .preview-subtitle {
+            text-align: center;
+            color: var(--cinereous);
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 4rem;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .preview-card {
+            background: var(--jet);
+            border: 2px solid var(--taupe);
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(189, 144, 121, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .preview-card:hover::before {
+            left: 100%;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--beaver);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .limited-card:hover {
+            border-color: var(--fire-brick);
+        }
+
+        .permanent-card:hover {
+            border-color: var(--golden-brown);
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .limited-badge {
+            background-color: var(--fire-brick);
+            color: var(--white);
+        }
+
+        .permanent-badge {
+            background-color: var(--golden-brown);
+            color: var(--black);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            filter: grayscale(30%);
+        }
+
+        .card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .card-link {
+            display: inline-block;
+            color: var(--beaver);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .limited-card .card-link {
+            color: var(--fire-brick);
+        }
+
+        .permanent-card .card-link {
+            color: var(--golden-brown);
+        }
+
+        .card-link:hover {
+            transform: translateX(5px);
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* State Toggle */
+        .state-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 20px rgba(138, 108, 38, 0.6);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-family: 'Barlow', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .state-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(138, 108, 38, 0.8);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+                letter-spacing: 4px;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .time-value {
+                font-size: 3.5rem;
+            }
+
+            .countdown-section.expanded .time-value {
+                font-size: 4rem;
+            }
+
+            .shop-button {
+                padding: 1.2rem 3rem;
+                font-size: 1.2rem;
+                letter-spacing: 3px;
+            }
+
+            .countdown-timer {
+                gap: 2rem;
+            }
+
+            .preview-title {
+                font-size: 2rem;
+                letter-spacing: 4px;
+            }
+
+            .preview-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .card-title {
+                font-size: 1.6rem;
+            }
+
+            .placeholder-text {
+                font-size: 4rem;
+                letter-spacing: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Track Order</a></li>
+        </ul>
+        <div class="cart-icon">
+            <span style="font-size: 1.5rem; color: var(--cinereous);">🛒</span>
+            <span class="cart-badge">0</span>
+        </div>
+    </nav>
+
+    <!-- Free Shipping Banner -->
+    <div class="shipping-banner" id="shippingBanner">
+        <span class="shipping-text">🚚 FREE U.S. SHIPPING ON ORDERS OVER $100 WHILE COLLECTION IS LIVE!</span>
+        <span class="shipping-timer" id="bannerTimer">9D 5H 31M 17S</span>
+    </div>
+
+    <!-- Hero Section with Carousel -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-carousel" id="heroCarousel">
+            <div class="hero-slide active">
+                <div class="hero-placeholder hero-placeholder-1">
+                    <div class="placeholder-text">OUTERWEAR</div>
+                    <div class="placeholder-model"></div>
+                    <div class="placeholder-accent accent-1"></div>
+                    <div class="placeholder-product"></div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="hero-placeholder hero-placeholder-2">
+                    <div class="placeholder-text">LUXURY</div>
+                    <div class="placeholder-model"></div>
+                    <div class="placeholder-accent accent-2"></div>
+                    <div class="placeholder-product"></div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="hero-placeholder hero-placeholder-3">
+                    <div class="placeholder-text">DENIM</div>
+                    <div class="placeholder-model"></div>
+                    <div class="placeholder-accent accent-3"></div>
+                    <div class="placeholder-product"></div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="hero-placeholder hero-placeholder-4">
+                    <div class="placeholder-text">STREET<br>STYLE</div>
+                    <div class="placeholder-model"></div>
+                    <div class="placeholder-accent accent-1"></div>
+                    <div class="placeholder-product"></div>
+                </div>
+            </div>
+            <div class="hero-slide">
+                <div class="hero-placeholder hero-placeholder-5">
+                    <div class="placeholder-text">HOODIES</div>
+                    <div class="placeholder-model"></div>
+                    <div class="placeholder-accent accent-2"></div>
+                    <div class="placeholder-product"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-overlay">
+            <div class="collection-badge">FALL 2025</div>
+            <h1 class="hero-title">URBAN ESSENTIALS</h1>
+            <p class="hero-subtitle">Bold. Authentic. Unapologetic.</p>
+        </div>
+
+        <div class="carousel-dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+            <span class="dot" data-slide="3"></span>
+            <span class="dot" data-slide="4"></span>
+        </div>
+    </section>
+
+    <!-- Countdown Timer -->
+    <section class="countdown-section" id="countdownSection">
+        <h2 class="countdown-title" id="countdownTitle">TIME LEFT IN FALL COLLECTION</h2>
+        <div class="countdown-timer">
+            <div class="time-unit">
+                <span class="time-value" id="days">09</span>
+                <span class="time-label">DAYS</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="hours">05</span>
+                <span class="time-label">HOURS</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="minutes">31</span>
+                <span class="time-label">MINUTES</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="seconds">17</span>
+                <span class="time-label">SECONDS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider" id="divider"></div>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="ctaSection">
+        <a href="#" class="shop-button">
+            <span>SHOP THIS DROP</span>
+        </a>
+    </section>
+
+    <!-- Collections Preview Section -->
+    <section class="collections-preview">
+        <div class="preview-container">
+            <h2 class="preview-title">EXPLORE OUR COLLECTIONS</h2>
+            <p class="preview-subtitle">Limited drops meet timeless essentials</p>
+            
+            <div class="preview-grid">
+                <!-- Limited Time Card -->
+                <div class="preview-card limited-card">
+                    <div class="card-badge limited-badge">LIMITED TIME</div>
+                    <div class="card-icon">⚡</div>
+                    <h3 class="card-title">SEASONAL DROPS</h3>
+                    <p class="card-description">Exclusive collections released quarterly. Each drop features unique pieces available for 30 days only.</p>
+                    <a href="#" class="card-link">Shop Current Drop →</a>
+                </div>
+
+                <!-- Year-Round Card -->
+                <div class="preview-card permanent-card">
+                    <div class="card-badge permanent-badge">ALWAYS AVAILABLE</div>
+                    <div class="card-icon">♾️</div>
+                    <h3 class="card-title">CORE COLLECTION</h3>
+                    <p class="card-description">Our signature pieces available year-round. Essential streetwear staples that define the JERRY'S aesthetic.</p>
+                    <a href="#" class="card-link">Shop Essentials →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- State Toggle -->
+    <div class="state-toggle" id="stateToggle">
+        Switch to State 2
+    </div>
+
+    <script>
+        // Hero Carousel
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance carousel every 4 seconds
+        setInterval(nextSlide, 4000);
+
+        // Manual dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        // State management
+        let currentState = 1;
+        const stateToggle = document.getElementById('stateToggle');
+        const shippingBanner = document.getElementById('shippingBanner');
+        const heroSection = document.getElementById('heroSection');
+        const countdownSection = document.getElementById('countdownSection');
+        const countdownTitle = document.getElementById('countdownTitle');
+        const divider = document.getElementById('divider');
+        const ctaSection = document.getElementById('ctaSection');
+
+        stateToggle.addEventListener('click', function() {
+            if (currentState === 1) {
+                // Switch to State 2
+                shippingBanner.classList.add('hidden');
+                heroSection.classList.add('hidden');
+                countdownSection.classList.add('expanded');
+                countdownTitle.textContent = 'SPRING COLLECTION DROPS IN';
+                countdownTitle.classList.add('next-drop');
+                divider.classList.add('hidden');
+                ctaSection.classList.add('state2');
+                
+                // Update button text for State 2
+                const shopButton = document.querySelector('.shop-button span');
+                if (shopButton) {
+                    shopButton.textContent = 'SHOP OUR COLLECTIONS';
+                }
+                
+                stateToggle.textContent = 'Switch to State 1';
+                currentState = 2;
+            } else {
+                // Switch to State 1
+                shippingBanner.classList.remove('hidden');
+                heroSection.classList.remove('hidden');
+                countdownSection.classList.remove('expanded');
+                countdownTitle.textContent = 'TIME LEFT IN FALL COLLECTION';
+                countdownTitle.classList.remove('next-drop');
+                divider.classList.remove('hidden');
+                ctaSection.classList.remove('state2');
+                
+                // Update button text for State 1
+                const shopButton = document.querySelector('.shop-button span');
+                if (shopButton) {
+                    shopButton.textContent = 'SHOP THIS DROP';
+                }
+                
+                stateToggle.textContent = 'Switch to State 2';
+                currentState = 1;
+            }
+        });
+
+        // Countdown timer
+        function updateCountdown() {
+            let seconds = 17;
+            let minutes = 31;
+            let hours = 5;
+            let days = 9;
+
+            setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                        if (hours < 0) {
+                            hours = 23;
+                            days--;
+                        }
+                    }
+                }
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                
+                // Update banner timer
+                const bannerTimer = document.getElementById('bannerTimer');
+                if (bannerTimer) {
+                    bannerTimer.textContent = `${days}D ${hours}H ${minutes}M ${seconds}S`;
+                }
+            }, 1000);
+        }
+
+        updateCountdown();
+    </script>
+
+</body>
+</html>

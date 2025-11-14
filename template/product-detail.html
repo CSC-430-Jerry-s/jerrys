@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distressed Puffer - JERRY'S</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Primary Palette - Earthy Fire */
+            --black: #030502;
+            --jet: #2B2821;
+            --fire-brick: #AC362D;
+            --fire-brick-2: #AB3B2F;
+            --fire-brick-3: #AF3B32;
+            --beaver: #BD9079;
+            --cinereous: #8E7C71;
+            --taupe: #3F372D;
+            --golden-brown: #8A6C26;
+            --van-dyke: #392F26;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: var(--black);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--taupe);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            color: var(--white);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--beaver);
+        }
+
+        .nav-links a.active {
+            color: var(--fire-brick);
+            border-bottom: 2px solid var(--fire-brick);
+            padding-bottom: 2px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--golden-brown);
+            color: var(--black);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .cart-badge.bounce {
+            animation: cartBounce 0.5s ease;
+        }
+
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 1.5rem 5%;
+            background-color: var(--jet);
+        }
+
+        .breadcrumb a {
+            color: var(--cinereous);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--beaver);
+        }
+
+        .breadcrumb span {
+            color: var(--cinereous);
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb .current {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Product Section */
+        .product-section {
+            padding: 4rem 5%;
+            background-color: var(--black);
+        }
+
+        .product-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+        }
+
+        /* Product Images */
+        .product-images {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 700px;
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--taupe);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            opacity: 0.3;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 0.6rem 1.2rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            z-index: 2;
+        }
+
+        .thumbnail-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .thumbnail {
+            width: 120px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--taupe) 0%, var(--van-dyke) 100%);
+            border: 2px solid var(--taupe);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--beaver);
+            opacity: 1;
+        }
+
+        /* Product Info */
+        .product-info {
+            position: relative;
+        }
+
+        .product-category {
+            color: var(--cinereous);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            color: var(--white);
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .product-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--fire-brick);
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .product-description {
+            color: var(--cinereous);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Color Selector */
+        .selector-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--taupe);
+        }
+
+        .selector-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--taupe);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-swatch.selected {
+            border-color: var(--fire-brick);
+            transform: scale(1.1);
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+            border-color: var(--beaver);
+        }
+
+        /* Predefined colors */
+        .color-cream {
+            background: linear-gradient(135deg, #E8DCC4 0%, #D4C5A9 100%);
+        }
+
+        .color-black {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+        }
+
+        .color-olive {
+            background: linear-gradient(135deg, #708238 0%, #556B2F 100%);
+        }
+
+        .color-brown {
+            background: linear-gradient(135deg, #8B7355 0%, #6F5438 100%);
+        }
+
+        /* Size Selector */
+        .size-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .size-button {
+            min-width: 70px;
+            padding: 1rem 1.5rem;
+            background-color: var(--jet);
+            color: var(--white);
+            border: 2px solid var(--taupe);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .size-button:hover {
+            background-color: var(--taupe);
+            border-color: var(--beaver);
+        }
+
+        .size-button.selected {
+            background-color: var(--fire-brick);
+            border-color: var(--fire-brick);
+        }
+
+        .size-button.unavailable {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        /* Add to Cart */
+        .add-to-cart-section {
+            margin-top: 3rem;
+        }
+
+        .add-to-cart-button {
+            width: 100%;
+            padding: 1.5rem;
+            background-color: var(--fire-brick);
+            color: var(--white);
+            border: 3px solid var(--golden-brown);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart-button:hover:not(:disabled) {
+            background-color: var(--fire-brick-2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(172, 54, 45, 0.5);
+        }
+
+        .add-to-cart-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .add-to-cart-button:disabled {
+            background-color: var(--cinereous);
+            border-color: var(--taupe);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background-color: var(--fire-brick);
+            color: var(--white);
+            padding: 2rem 3rem;
+            border: 3px solid var(--golden-brown);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .success-message.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* Flying Item Animation */
+        .flying-item {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--beaver) 0%, var(--cinereous) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0;
+            border: 2px solid var(--taupe);
+        }
+
+        @keyframes flyToCart {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--mid-x), var(--mid-y)) scale(0.8) rotate(180deg);
+            }
+            100% {
+                transform: translate(var(--end-x), var(--end-y)) scale(0.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Product Details */
+        .product-details {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--taupe);
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-content {
+            color: var(--cinereous);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .detail-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .detail-list li::before {
+            content: '•';
+            color: var(--fire-brick);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--jet);
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--taupe);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--cinereous);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .product-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .main-image {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .product-name {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .product-price {
+                font-size: 2rem;
+            }
+
+            .main-image {
+                height: 400px;
+            }
+
+            .thumbnail {
+                width: 80px;
+                height: 100px;
+            }
+
+            .image-placeholder {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">JERRY'S</div>
+        <ul class="nav-links">
+            <li><a href="homepage-v2.html">Home</a></li>
+            <li><a href="collections-page.html" class="active">Collections</a></li>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Track Order</a></li>
+        </ul>
+        <div class="cart-icon" id="cartIcon">
+            <span style="font-size: 1.5rem; color: var(--cinereous);">🛒</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="homepage-v2.html">Home</a>
+        <span>›</span>
+        <a href="collections-page.html">Collections</a>
+        <span>›</span>
+        <a href="individual-collection.html">Urban Decay</a>
+        <span>›</span>
+        <span class="current">Distressed Puffer</span>
+    </div>
+
+    <!-- Product Section -->
+    <section class="product-section">
+        <div class="product-container">
+            <!-- Product Images -->
+            <div class="product-images">
+                <div class="main-image" id="mainImage">
+                    <div class="product-badge">NEW</div>
+                    <div class="image-placeholder">🧥</div>
+                </div>
+                <div class="thumbnail-row">
+                    <div class="thumbnail active">
+                        <span style="font-size: 2rem; opacity: 0.5;">🧥</span>
+                    </div>
+                    <div class="thumbnail">
+                        <span style="font-size: 2rem; opacity: 0.5;">👕</span>
+                    </div>
+                    <div class="thumbnail">
+                        <span style="font-size: 2rem; opacity: 0.5;">📐</span>
+                    </div>
+                    <div class="thumbnail">
+                        <span style="font-size: 2rem; opacity: 0.5;">🔍</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <div class="product-category">Outerwear / Fall 2025</div>
+                <h1 class="product-name">DISTRESSED PUFFER</h1>
+                <div class="product-price">$245.00</div>
+                <p class="product-description">
+                    Oversized sherpa-lined puffer jacket with intentional wear details. Features premium water-resistant 
+                    exterior, quilted construction, and ribbed cuffs for warmth. The distressed finish gives each piece 
+                    a unique, lived-in aesthetic that only gets better with time. Part of the Urban Decay collection.
+                </p>
+
+                <!-- Color Selector -->
+                <div class="selector-section">
+                    <label class="selector-label">Color: Cream</label>
+                    <div class="color-options">
+                        <div class="color-swatch color-cream selected" data-color="Cream"></div>
+                        <div class="color-swatch color-black" data-color="Black"></div>
+                        <div class="color-swatch color-olive" data-color="Olive"></div>
+                        <div class="color-swatch color-brown" data-color="Brown"></div>
+                    </div>
+                </div>
+
+                <!-- Size Selector -->
+                <div class="selector-section">
+                    <label class="selector-label">Size: Select Size</label>
+                    <div class="size-options">
+                        <button class="size-button unavailable" data-size="XS">XS</button>
+                        <button class="size-button" data-size="S">S</button>
+                        <button class="size-button" data-size="M">M</button>
+                        <button class="size-button" data-size="L">L</button>
+                        <button class="size-button" data-size="XL">XL</button>
+                        <button class="size-button" data-size="XXL">XXL</button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart -->
+                <div class="add-to-cart-section">
+                    <button class="add-to-cart-button" id="addToCartBtn" disabled>
+                        SELECT SIZE TO ADD TO CART
+                    </button>
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details">
+                    <div class="detail-section">
+                        <h3 class="detail-title">Product Details</h3>
+                        <ul class="detail-list">
+                            <li>Oversized fit for layering</li>
+                            <li>Water-resistant polyester shell</li>
+                            <li>Sherpa fleece lining</li>
+                            <li>Quilted construction with down-alternative fill</li>
+                            <li>Intentional distressing (each piece unique)</li>
+                            <li>Ribbed cuffs and hem</li>
+                            <li>Two side pockets + interior chest pocket</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3 class="detail-title">Fit & Sizing</h3>
+                        <p class="detail-content">
+                            Model is 6'0" and wearing size M. Oversized fit—order your usual size for intended look, 
+                            or size down for a more fitted style.
+                        </p>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3 class="detail-title">Care Instructions</h3>
+                        <ul class="detail-list">
+                            <li>Machine wash cold, gentle cycle</li>
+                            <li>Do not bleach</li>
+                            <li>Tumble dry low</li>
+                            <li>Do not iron distressed areas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        ✓ ADDED TO CART
+    </div>
+
+    <!-- Flying Item Template -->
+    <div class="flying-item" id="flyingItem">
+        🧥
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 JERRY'S STREETWEAR. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        let selectedColor = 'Cream';
+        let selectedSize = null;
+        let cartCount = 0;
+
+        // Color selection
+        const colorSwatches = document.querySelectorAll('.color-swatch');
+        const colorLabel = document.querySelector('.selector-label');
+
+        colorSwatches.forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                colorSwatches.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedColor = this.dataset.color;
+                document.querySelectorAll('.selector-label')[0].textContent = `Color: ${selectedColor}`;
+            });
+        });
+
+        // Size selection
+        const sizeButtons = document.querySelectorAll('.size-button:not(.unavailable)');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                sizeButtons.forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedSize = this.dataset.size;
+                document.querySelectorAll('.selector-label')[1].textContent = `Size: ${selectedSize}`;
+                
+                // Enable add to cart button
+                addToCartBtn.disabled = false;
+                addToCartBtn.textContent = 'ADD TO CART';
+            });
+        });
+
+        // Add to cart with animation
+        addToCartBtn.addEventListener('click', function() {
+            if (selectedSize) {
+                // Trigger flying animation
+                flyToCart();
+                
+                // Update cart count
+                cartCount++;
+                updateCartBadge();
+                
+                // Show success message
+                showSuccessMessage();
+            }
+        });
+
+        function flyToCart() {
+            const flyingItem = document.getElementById('flyingItem');
+            const mainImage = document.getElementById('mainImage');
+            const cartIcon = document.getElementById('cartIcon');
+            
+            // Get positions
+            const imageRect = mainImage.getBoundingClientRect();
+            const cartRect = cartIcon.getBoundingClientRect();
+            
+            // Calculate distances
+            const startX = imageRect.left + imageRect.width / 2;
+            const startY = imageRect.top + imageRect.height / 2;
+            const endX = cartRect.left - startX;
+            const endY = cartRect.top - startY;
+            const midX = endX / 2;
+            const midY = endY / 2 - 100; // Arc effect
+            
+            // Set CSS variables for animation
+            flyingItem.style.setProperty('--mid-x', `${midX}px`);
+            flyingItem.style.setProperty('--mid-y', `${midY}px`);
+            flyingItem.style.setProperty('--end-x', `${endX}px`);
+            flyingItem.style.setProperty('--end-y', `${endY}px`);
+            
+            // Position flying item
+            flyingItem.style.left = startX + 'px';
+            flyingItem.style.top = startY + 'px';
+            
+            // Trigger animation
+            flyingItem.style.animation = 'flyToCart 1s ease-in-out forwards';
+            
+            // Reset after animation
+            setTimeout(() => {
+                flyingItem.style.animation = '';
+                flyingItem.style.opacity = '0';
+            }, 1000);
+        }
+
+        function updateCartBadge() {
+            const cartBadge = document.getElementById('cartBadge');
+            cartBadge.textContent = cartCount;
+            cartBadge.classList.add('bounce');
+            
+            setTimeout(() => {
+                cartBadge.classList.remove('bounce');
+            }, 500);
+        }
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('show');
+            
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 2000);
+        }
+
+        // Thumbnail switching
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', function() {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // In production, would switch main image
+            });
+        });
+    </script>
+
+</body>
+</html>

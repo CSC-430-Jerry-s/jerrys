@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Jerry's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F0;
+            color: #030502;
+        }
+
+        /* Color Palette */
+        :root {
+            --black: #030502;
+            --fire-brick: #AC362D;
+            --golden-brown: #8A6C26;
+            --beaver: #BD9079;
+            --cream: #F5F5F0;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--black);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--fire-brick);
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--fire-brick);
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--fire-brick);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .search-section h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            color: var(--black);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .search-section p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 18px 20px;
+            border: 2px solid #E0E0E0;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--fire-brick);
+        }
+
+        .search-box button {
+            padding: 18px 40px;
+            background-color: var(--fire-brick);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-box button:hover {
+            background-color: #8A2820;
+        }
+
+        .sample-orders {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .sample-orders strong {
+            color: var(--golden-brown);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Order Status Display */
+        .order-status {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .order-status.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #F0F0F0;
+        }
+
+        .order-info h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--black);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .order-info .order-number {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .order-info .order-date {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 10px 20px;
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge.in-transit {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+
+        /* Shipping Timeline */
+        .shipping-timeline {
+            margin-bottom: 40px;
+        }
+
+        .timeline-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--black);
+            letter-spacing: 1px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: #E0E0E0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #E0E0E0;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #E0E0E0;
+        }
+
+        .timeline-item.completed::before {
+            background: var(--fire-brick);
+            box-shadow: 0 0 0 2px var(--fire-brick);
+        }
+
+        .timeline-item.current::before {
+            background: var(--golden-brown);
+            box-shadow: 0 0 0 2px var(--golden-brown);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .timeline-content h3 {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--black);
+        }
+
+        .timeline-content .date {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content .location {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* Tracking Info Box */
+        .tracking-info {
+            background: #F9F9F9;
+            padding: 25px;
+            border-radius: 6px;
+            margin-bottom: 40px;
+        }
+
+        .tracking-info h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .tracking-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .tracking-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tracking-item label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .tracking-item span {
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        .tracking-link {
+            color: var(--fire-brick);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .tracking-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Order Items */
+        .order-items {
+            margin-bottom: 30px;
+        }
+
+        .order-items h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: #F9F9F9;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--golden-brown), var(--beaver));
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .item-details .item-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--black);
+            font-size: 16px;
+        }
+
+        /* Collection Updates Section */
+        .collection-updates {
+            background: linear-gradient(135deg, var(--black) 0%, #1a1a18 100%);
+            padding: 60px 50px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .collection-updates h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            color: var(--fire-brick);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .collection-updates > p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            font-size: 15px;
+        }
+
+        .updates-timeline {
+            max-width: 800px;
+        }
+
+        .update-date-block {
+            margin-bottom: 35px;
+            padding-bottom: 35px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .update-date-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .update-date {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--beaver);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .update-date::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--fire-brick);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .update-bullets {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .update-bullets li {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .update-bullets li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--fire-brick);
+            font-weight: bold;
+        }
+
+        .update-bullets li:last-child {
+            margin-bottom: 0;
+        }
+
+        .collection-tag {
+            color: var(--golden-brown);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--black);
+            color: var(--cream);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-section, .order-status, .collection-updates {
+                padding: 30px 25px;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .tracking-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .update-date {
+                font-size: 24px;
+            }
+
+            .updates-timeline {
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">JERRY'S</div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Collections</a>
+            <a href="#">Store</a>
+            <a href="#">Track Order</a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h1>Track Your Order</h1>
+            <p>Enter your order number below to track your package and get real-time shipping updates.</p>
+            
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="orderNumberInput" 
+                    placeholder="Enter order number (e.g., JRY-2024-10453)"
+                >
+                <button onclick="trackOrder()">Track Order</button>
+            </div>
+            
+            <div class="sample-orders">
+                Try sample orders: 
+                <strong onclick="fillOrder('JRY-2024-10453')">JRY-2024-10453</strong> or 
+                <strong onclick="fillOrder('JRY-2024-10891')">JRY-2024-10891</strong>
+            </div>
+        </div>
+
+        <!-- Order Status Display -->
+        <div class="order-status" id="orderStatus">
+            <div class="order-header">
+                <div class="order-info">
+                    <h2>Order Details</h2>
+                    <div class="order-number">Order #<span id="displayOrderNumber"></span></div>
+                    <div class="order-date">Placed on <span id="orderDate"></span></div>
+                </div>
+                <div class="status-badge" id="statusBadge">In Transit</div>
+            </div>
+
+            <!-- Shipping Timeline -->
+            <div class="shipping-timeline">
+                <div class="timeline-title">Shipping Timeline</div>
+                <div class="timeline" id="timeline">
+                    <!-- Timeline items will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Tracking Information -->
+            <div class="tracking-info">
+                <h3>Tracking Information</h3>
+                <div class="tracking-grid">
+                    <div class="tracking-item">
+                        <label>Carrier</label>
+                        <span id="carrier">USPS Priority Mail</span>
+                    </div>
+                    <div class="tracking-item">
+                        <label>Tracking Number</label>
+                        <span id="trackingNumber">9405511899563824710294</span>
+                    </div>
+                    <div class="tracking-item">
+                        <label>Estimated Delivery</label>
+                        <span id="estimatedDelivery">October 22, 2025</span>
+                    </div>
+                    <div class="tracking-item">
+                        <label>View on Carrier Site</label>
+                        <a href="#" class="tracking-link" id="carrierLink">Track with USPS →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="order-items">
+                <h3>Items in This Order</h3>
+                <div id="orderItemsList">
+                    <!-- Items will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Updates -->
+        <div class="collection-updates">
+            <h2>Current Drop Updates</h2>
+            <p>Stay in the loop with the latest news and shipping updates for Jerry's Fall 2025 Collection</p>
+            
+            <div class="updates-timeline">
+                <div class="update-date-block">
+                    <div class="update-date">October 20, 2025</div>
+                    <ul class="update-bullets">
+                        <li>Items purchased from <span class="collection-tag">Fall 2025 Collection</span> are currently being shipped</li>
+                        <li>Heritage Cargo Pants now down to final sizes (30, 32, 36 only)</li>
+                        <li>Free shipping extended through end of collection period (Oct 27)</li>
+                    </ul>
+                </div>
+
+                <div class="update-date-block">
+                    <div class="update-date">October 15, 2025</div>
+                    <ul class="update-bullets">
+                        <li>Items from <span class="collection-tag">Summer 2025 Collection</span> are currently in production for final restocks</li>
+                        <li>Vintage Logo Tee restocked in all sizes and colors</li>
+                        <li>Fall 2025 Collection passes 50% sell-through milestone</li>
+                    </ul>
+                </div>
+
+                <div class="update-date-block">
+                    <div class="update-date">October 10, 2025</div>
+                    <ul class="update-bullets">
+                        <li>Fall 2025 Collection launches - all items now live on homepage</li>
+                        <li>30-day collection period begins (ends October 27, 2025)</li>
+                        <li>Free U.S. shipping activated for orders over $100</li>
+                    </ul>
+                </div>
+
+                <div class="update-date-block">
+                    <div class="update-date">October 1, 2025</div>
+                    <ul class="update-bullets">
+                        <li>Items from <span class="collection-tag">Spring 2025 Collection</span> moved to permanent store catalog</li>
+                        <li>Limited restocks available for select Spring items</li>
+                        <li>Preview images released for upcoming Fall 2025 Collection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jerry's Streetwear. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 14px; color: #999;">Questions? Contact support@jerrysclothing.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample order data
+        const orderData = {
+            'JRY-2024-10453': {
+                date: 'October 15, 2025',
+                status: 'in-transit',
+                carrier: 'USPS Priority Mail',
+                trackingNumber: '9405511899563824710294',
+                estimatedDelivery: 'October 22, 2025',
+                carrierUrl: 'https://tools.usps.com/go/TrackConfirmAction',
+                timeline: [
+                    {
+                        status: 'Order Placed',
+                        date: 'October 15, 2025 - 2:34 PM',
+                        location: 'Order confirmed',
+                        completed: true
+                    },
+                    {
+                        status: 'Processing',
+                        date: 'October 15, 2025 - 5:20 PM',
+                        location: 'Jerry\'s Warehouse, Los Angeles, CA',
+                        completed: true
+                    },
+                    {
+                        status: 'Shipped',
+                        date: 'October 16, 2025 - 9:15 AM',
+                        location: 'Departed USPS Facility, Los Angeles, CA',
+                        completed: true
+                    },
+                    {
+                        status: 'In Transit',
+                        date: 'October 19, 2025 - 6:42 AM',
+                        location: 'In Transit to Next Facility',
+                        current: true
+                    },
+                    {
+                        status: 'Out for Delivery',
+                        date: 'Pending',
+                        location: 'Your local post office',
+                        completed: false
+                    },
+                    {
+                        status: 'Delivered',
+                        date: 'Pending',
+                        location: 'Your address',
+                        completed: false
+                    }
+                ],
+                items: [
+                    {
+                        name: 'Heritage Cargo Pants',
+                        size: 'Size 32',
+                        color: 'Olive Green',
+                        price: '$98.00'
+                    },
+                    {
+                        name: 'Vintage Logo Tee',
+                        size: 'Size L',
+                        color: 'Cream',
+                        price: '$42.00'
+                    }
+                ]
+            },
+            'JRY-2024-10891': {
+                date: 'October 18, 2025',
+                status: 'delivered',
+                carrier: 'UPS Ground',
+                trackingNumber: '1Z9999999999999999',
+                estimatedDelivery: 'October 20, 2025',
+                carrierUrl: 'https://www.ups.com/track',
+                timeline: [
+                    {
+                        status: 'Order Placed',
+                        date: 'October 18, 2025 - 11:22 AM',
+                        location: 'Order confirmed',
+                        completed: true
+                    },
+                    {
+                        status: 'Processing',
+                        date: 'October 18, 2025 - 3:45 PM',
+                        location: 'Jerry\'s Warehouse, Los Angeles, CA',
+                        completed: true
+                    },
+                    {
+                        status: 'Shipped',
+                        date: 'October 19, 2025 - 8:30 AM',
+                        location: 'Departed UPS Facility, Los Angeles, CA',
+                        completed: true
+                    },
+                    {
+                        status: 'Out for Delivery',
+                        date: 'October 20, 2025 - 7:15 AM',
+                        location: 'Out for delivery, New York, NY',
+                        completed: true
+                    },
+                    {
+                        status: 'Delivered',
+                        date: 'October 20, 2025 - 2:38 PM',
+                        location: 'Left at front door',
+                        current: true
+                    }
+                ],
+                items: [
+                    {
+                        name: 'Oversized Hoodie',
+                        size: 'Size XL',
+                        color: 'Black',
+                        price: '$85.00'
+                    }
+                ]
+            }
+        };
+
+        function fillOrder(orderNumber) {
+            document.getElementById('orderNumberInput').value = orderNumber;
+            trackOrder();
+        }
+
+        function trackOrder() {
+            const orderNumber = document.getElementById('orderNumberInput').value.trim();
+            const orderStatus = document.getElementById('orderStatus');
+            
+            if (!orderNumber) {
+                alert('Please enter an order number');
+                return;
+            }
+
+            const order = orderData[orderNumber];
+            
+            if (!order) {
+                alert('Order not found. Please check your order number and try again.\n\nTry: JRY-2024-10453 or JRY-2024-10891');
+                return;
+            }
+
+            // Display order information
+            document.getElementById('displayOrderNumber').textContent = orderNumber;
+            document.getElementById('orderDate').textContent = order.date;
+            document.getElementById('carrier').textContent = order.carrier;
+            document.getElementById('trackingNumber').textContent = order.trackingNumber;
+            document.getElementById('estimatedDelivery').textContent = order.estimatedDelivery;
+            document.getElementById('carrierLink').textContent = `Track with ${order.carrier.split(' ')[0]} →`;
+            document.getElementById('carrierLink').href = order.carrierUrl;
+
+            // Update status badge
+            const statusBadge = document.getElementById('statusBadge');
+            if (order.status === 'delivered') {
+                statusBadge.textContent = 'Delivered';
+                statusBadge.className = 'status-badge';
+                statusBadge.style.backgroundColor = '#E8F5E9';
+                statusBadge.style.color = '#2E7D32';
+            } else {
+                statusBadge.textContent = 'In Transit';
+                statusBadge.className = 'status-badge in-transit';
+            }
+
+            // Build timeline
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            order.timeline.forEach(item => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                if (item.completed) timelineItem.classList.add('completed');
+                if (item.current) timelineItem.classList.add('current');
+                
+                timelineItem.innerHTML = `
+                    <div class="timeline-content">
+                        <h3>${item.status}</h3>
+                        <div class="date">${item.date}</div>
+                        <div class="location">${item.location}</div>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+
+            // Build items list
+            const itemsList = document.getElementById('orderItemsList');
+            itemsList.innerHTML = '';
+            order.items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `
+                    <div class="item-image"></div>
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <div class="item-meta">${item.size} • ${item.color}</div>
+                        <div class="item-price">${item.price}</div>
+                    </div>
+                `;
+                itemsList.appendChild(itemDiv);
+            });
+
+            // Show order status
+            orderStatus.classList.add('active');
+            orderStatus.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
