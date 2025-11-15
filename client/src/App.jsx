@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Navbar from "./components/Navbar.jsx";
 
+import Homepage from "./app/homepage/page.jsx";
+import CollectionsPage from "./app/collections/page.jsx";
+import SeasonProductsPage from "./app/collections/SeasonProductsPage.jsx";
+import ProductDetailPage from "./app/product/ProductDetailPage.jsx";
+import ShoppingCartPage from "./app/shoppingCart/page.jsx";
+import TrackOrderPage from "./app/trackOrder/page.jsx";
+
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app-shell">
+      <Navbar />
+      <main className="app-main">
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          {/* products for a specific season */}
+          <Route
+            path="/collections/:seasonId"
+            element={<SeasonProductsPage />}
+          />
+          {/* item details for a specific product */}
+          <Route path="/product/:productId" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<ShoppingCartPage />} />
+          <Route path="/track-order" element={<TrackOrderPage />} />
+        </Routes>
+      </main>
+    </div>
+  );
 }
 
-export default App
+
+
