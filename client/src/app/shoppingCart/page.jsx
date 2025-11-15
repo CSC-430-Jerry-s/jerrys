@@ -1,79 +1,87 @@
 // src/app/shoppingCart/page.jsx
-import { useNavigate } from "react-router-dom";
-import { useCart } from "../../context/CartContext.jsx";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 export default function ShoppingCartPage() {
-  const navigate = useNavigate();
-  const { items, removeItem, updateQuantity, subtotal } = useCart();
+  const { items, updateQuantity, removeItem } = useCart();
 
-  const handleContinueShopping = () => {
-    navigate("/collections");
-  };
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-  const handleCheckout = () => {
-    // not functional yet – just a placeholder
-    alert("Checkout flow coming soon 🙂");
-  };
-
-  return (
-    <div className="page cart-page">
-      <header className="page-header">
-        <h1>Shopping Cart</h1>
-        <p>Review your items before checking out.</p>
-      </header>
-
-      {items.length === 0 ? (
-        <div className="cart-empty">
-          <p>Your cart is empty.</p>
-          <button className="btn-secondary" onClick={handleContinueShopping}>
-            ← Continue Shopping
-          </button>
+  // EMPTY STATE
+  if (items.length === 0) {
+    return (
+      <section className="cart-page">
+        <div className="section-header">
+          <h2 className="section-title">YOUR CART IS EMPTY</h2>
+          <p className="section-description">
+            Start with a hoodie, tee, or pair of cargos from the latest drop.
+          </p>
+          <Link to="/collections" className="collection-button">
+            BROWSE COLLECTIONS
+          </Link>
         </div>
-      ) : (
-        <>
-          <section className="cart-layout">
-            <div className="cart-items">
-              {items.map((item) => (
-                <article key={item.id} className="cart-item">
-                  <div className="cart-item-main">
-                    <div>
-                      <h2 className="cart-item-name">{item.name}</h2>
-                      {item.color && (
-                        <p className="cart-item-meta">{item.color}</p>
-                      )}
-                    </div>
-                    <button
-                      className="cart-remove"
-                      onClick={() => removeItem(item.id)}
-                    >
-                      Remove
-                    </button>
+      </section>
+    );
+  }
+
+  // CART WITH ITEMS
+  return (
+    <section className="cart-page">
+      <div className="section-header">
+        <h2 className="section-title">SHOPPING CART</h2>
+        <p className="section-description">
+          Review your picks before checkout.
+        </p>
+      </div>
+
+      <div className="cart-layout">
+        {/* LEFT: ITEMS */}
+        <div className="cart-items">
+          {items.map((item) => {
+            const lineTotal = item.price * item.quantity;
+
+            return (
+              <div key={item.id} className="cart-item">
+                {/* small placeholder image box */}
+                <div className="cart-item-image">🧥</div>
+
+                <div className="cart-item-info">
+                  <div>
+                    <h3 className="cart-item-name">{item.name}</h3>
+                    <p className="cart-item-price">
+                      ${item.price.toFixed(2)}
+                    </p>
                   </div>
 
-                  <div className="cart-item-bottom">
-                    <div className="cart-qty-controls">
+                  <div className="cart-item-controls">
+                    <div className="cart-qty-control">
                       <button
-                        className="qty-button"
+                        type="button"
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
+                          updateQuantity(
+                            item.id,
+                            Math.max(1, item.quantity - 1)
+                          )
                         }
                       >
                         −
                       </button>
                       <input
                         type="number"
-                        min={1}
-                        className="qty-input"
+                        min="1"
                         value={item.quantity}
                         onChange={(e) =>
                           updateQuantity(
                             item.id,
-                            Number(e.target.value) || 1
+                            Math.max(1, Number(e.target.value) || 1)
                           )
                         }
                       />
                       <button
-                        className="qty-button"
+                        type="button"
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
@@ -81,44 +89,52 @@ export default function ShoppingCartPage() {
                         +
                       </button>
                     </div>
-                    <div className="cart-item-price">
-                      ${item.price * item.quantity}
-                    </div>
+
+                    <button
+                      type="button"
+                      className="cart-remove"
+                      onClick={() => removeItem(item.id)}
+                    >
+                      Remove
+                    </button>
                   </div>
-                </article>
-              ))}
-            </div>
+                </div>
 
-            <aside className="cart-summary">
-              <h2>Order Summary</h2>
-              <div className="summary-row">
-                <span>Subtotal</span>
-                <span>${subtotal}</span>
+                <div className="cart-item-subtotal">
+                  ${lineTotal.toFixed(2)}
+                </div>
               </div>
-              <div className="summary-row">
-                <span>Shipping</span>
-                <span>Calculated at checkout</span>
-              </div>
-              <div className="summary-row total">
-                <span>Total</span>
-                <span>${subtotal}</span>
-              </div>
-            </aside>
-          </section>
+            );
+          })}
+        </div>
 
-          <section className="cart-actions">
-            <button
-              className="btn-secondary"
-              onClick={handleContinueShopping}
-            >
-              ← Continue Shopping
-            </button>
-            <button className="btn-primary" onClick={handleCheckout}>
-              Checkout
-            </button>
-          </section>
-        </>
-      )}
-    </div>
+        {/* RIGHT: SUMMARY */}
+        <aside className="cart-summary">
+          <h2>Order Summary</h2>
+
+          <div className="cart-summary-row">
+            <span>Subtotal</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+          <div className="cart-summary-row">
+            <span>Shipping</span>
+            <span>Calculated at checkout</span>
+          </div>
+
+          <div className="cart-summary-total">
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+
+          <button className="collection-button cart-checkout-btn" disabled>
+            CHECKOUT (COMING SOON)
+          </button>
+
+          <Link to="/collections" className="cart-continue">
+            ← Continue shopping
+          </Link>
+        </aside>
+      </div>
+    </section>
   );
 }

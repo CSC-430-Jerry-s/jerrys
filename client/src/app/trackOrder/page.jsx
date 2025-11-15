@@ -1,139 +1,128 @@
-// src/app/trackOrder/page.jsx
+import { useState } from "react";
 
 export default function TrackOrderPage() {
+  const [orderNumber, setOrderNumber] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!orderNumber.trim()) return;
+    setHasSearched(true);
+  };
+
   return (
     <main className="track-page">
-      <div className="container">
-        {/* Search / input section */}
-        <section className="search-section">
+      <section className="track-container">
+        {/* SEARCH BOX */}
+        <div className="track-search-section">
           <h1>Track Your Order</h1>
           <p>
-            Enter your order number to see where your package is right now and
-            when it&apos;s expected to arrive.
+            Enter your order number below to track your package and see the
+            latest shipping updates.
           </p>
 
-          <div className="search-row">
+          <form className="track-search-box" onSubmit={handleSubmit}>
             <input
               type="text"
-              className="order-input"
-              placeholder="Enter your order number (e.g. JRY-2024-10453)"
+              placeholder="Enter order number (e.g., JRY-2025-10453)"
+              value={orderNumber}
+              onChange={(e) => setOrderNumber(e.target.value)}
             />
-            <button className="order-button">Track Order</button>
-          </div>
+            <button type="submit">Track Order</button>
+          </form>
+        </div>
 
-          <div className="sample-orders">
-            Try sample orders: <strong>JRY-2024-10453</strong> or{" "}
-            <strong>JRY-2024-10891</strong>
-          </div>
-        </section>
-
-        {/* Main layout: status + timeline + updates */}
-        <section className="status-layout">
-          {/* Current status card */}
-          <article className="status-card">
-            <h2>Current Status</h2>
-            <p className="status-label in-transit">In Transit</p>
-            <p className="status-text">
-              Your order has left the warehouse and is traveling to the local
-              carrier facility.
-            </p>
-
-            <ul className="status-meta">
-              <li>
-                <span>Order</span>
-                <span>JRY-2024-10453</span>
-              </li>
-              <li>
-                <span>Carrier</span>
-                <span>UPS Ground</span>
-              </li>
-              <li>
-                <span>Estimated Delivery</span>
-                <span>Nov 21–23</span>
-              </li>
-              <li>
-                <span>Destination</span>
-                <span>Staten Island, NY</span>
-              </li>
-            </ul>
-          </article>
-
-          {/* Timeline card */}
-          <article className="timeline-card">
-            <h2>Shipping Timeline</h2>
-            <ul className="timeline">
-              <li className="timeline-step done">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">Order Placed</div>
-                  <div className="step-meta">Nov 15 · 3:12 PM</div>
+        {/* RESULTS */}
+        {hasSearched && (
+          <div className="track-order-status active">
+            {/* HEADER */}
+            <div className="track-order-header">
+              <div className="track-order-info">
+                <h2>Order Details</h2>
+                <div className="track-order-number">
+                  Order #<span>{orderNumber}</span>
                 </div>
-              </li>
-              <li className="timeline-step done">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">Order Confirmed</div>
-                  <div className="step-meta">Nov 15 · 3:20 PM</div>
+                <div className="track-order-date">
+                  Placed on <span>October 20, 2025</span>
                 </div>
-              </li>
-              <li className="timeline-step done">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">Shipped</div>
-                  <div className="step-meta">Nov 16 · 9:42 AM</div>
-                </div>
-              </li>
-              <li className="timeline-step current">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">In Transit</div>
-                  <div className="step-meta">
-                    At carrier facility · Newark, NJ
+              </div>
+              <div className="track-status-badge in-transit">In Transit</div>
+            </div>
+
+            {/* TIMELINE */}
+            <div className="track-shipping-timeline">
+              <div className="track-timeline-title">Shipping Timeline</div>
+              <div className="track-timeline">
+                <div className="track-timeline-item completed">
+                  <div className="track-timeline-content">
+                    <h3>Order Placed</h3>
+                    <div className="date">October 20, 2025 - 2:14 PM</div>
+                    <div className="location">Order confirmed</div>
                   </div>
                 </div>
-              </li>
-              <li className="timeline-step">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">Out for Delivery</div>
-                  <div className="step-meta">Pending</div>
+
+                <div className="track-timeline-item completed">
+                  <div className="track-timeline-content">
+                    <h3>Processing</h3>
+                    <div className="date">October 20, 2025 - 5:02 PM</div>
+                    <div className="location">
+                      Jerry&apos;s Warehouse, Los Angeles, CA
+                    </div>
+                  </div>
                 </div>
-              </li>
-              <li className="timeline-step">
-                <span className="dot" />
-                <div>
-                  <div className="step-title">Delivered</div>
-                  <div className="step-meta">Pending</div>
+
+                <div className="track-timeline-item current">
+                  <div className="track-timeline-content">
+                    <h3>In Transit</h3>
+                    <div className="date">October 22, 2025 - 8:31 AM</div>
+                    <div className="location">In transit to next facility</div>
+                  </div>
                 </div>
-              </li>
-            </ul>
-          </article>
 
-          {/* Collection updates / marketing card */}
-          <aside className="updates-card">
-            <h2>Collection Updates</h2>
-            <p>
-              While your order is on the way, check what just dropped in this
-              collection.
-            </p>
+                <div className="track-timeline-item">
+                  <div className="track-timeline-content">
+                    <h3>Out for Delivery</h3>
+                    <div className="date">Pending</div>
+                    <div className="location">
+                      Your local carrier facility
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <ul className="updates-list">
-              <li>New heavyweight hoodies in charcoal and bone.</li>
-              <li>Utility cargos restocked in washed olive.</li>
-              <li>Limited graphic tees added to the archive.</li>
-            </ul>
-
-            <a href="/collections" className="updates-link">
-              View Collections →
-            </a>
-          </aside>
-        </section>
-      </div>
-
-      <footer className="footer">
-        <p>© 2025 JERRY&apos;S STREETWEAR. ALL RIGHTS RESERVED.</p>
-      </footer>
+            {/* TRACKING INFO BOX */}
+            <div className="track-tracking-info">
+              <h3>Tracking Information</h3>
+              <div className="track-tracking-grid">
+                <div className="track-tracking-item">
+                  <label>Carrier</label>
+                  <span>USPS Priority Mail</span>
+                </div>
+                <div className="track-tracking-item">
+                  <label>Tracking Number</label>
+                  <span>9405 5118 9956 XXXX XXXX</span>
+                </div>
+                <div className="track-tracking-item">
+                  <label>Estimated Delivery</label>
+                  <span>October 25, 2025</span>
+                </div>
+                <div className="track-tracking-item">
+                  <label>View on Carrier Site</label>
+                  <a
+                    href="https://tools.usps.com/go/TrackConfirmAction"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="track-tracking-link"
+                  >
+                    Track with USPS →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
     </main>
   );
 }
-

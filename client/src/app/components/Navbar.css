@@ -1,0 +1,66 @@
+/* src/app/components/Navbar.css */
+.navbar {
+  background-color: var(--black);
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--taupe);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-link {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 6px;
+  color: var(--white);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--cinereous);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: "Barlow", sans-serif;
+}
+
+.nav-links a:hover {
+  color: var(--beaver);
+}
+
+.nav-links a.active {
+  color: var(--fire-brick);
+  border-bottom: 2px solid var(--fire-brick);
+  padding-bottom: 2px;
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: var(--golden-brown);
+  color: var(--black);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
