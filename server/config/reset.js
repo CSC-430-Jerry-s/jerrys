@@ -1,4 +1,7 @@
-import { pool } from "./database";
+import { pool } from "./database.js";
+import usersData from '../data/json/users.js'
+import productsData from '../data/json/products.js'
+import productVariantsData from '../data/json/product_variants.js'
 
 const createUserTable = async () => {
     const query = `
@@ -285,3 +288,99 @@ const createReturnItemTable = async () => {
         console.error("Error creating return_items table: ", err);
     }
 }
+
+// await createUserTable();
+// await createAddressTable();
+// await createProductTable();
+// await createProductVariantTable();
+// await createCartTable();
+// await createCartItemTable();
+// await createOrderTable();
+// await createOrderItemTable();
+// await createShipmentTable();
+// await createReturnTable();
+// await createReturnItemTable();
+
+// const x = await pool.query(`SELECT table_name 
+// FROM information_schema.tables 
+// WHERE table_schema = 'public';`)
+
+// console.log(x)
+
+
+const seedUsersTable = async () => {
+    usersData.forEach((user) => {
+        const insertQuery = {
+            text: `INSERT INTO users (email, password, first_name, last_name, phone, role) VALUES ($1, $2, $3, $4, $5, $6);`
+        }
+        const values = [
+            user.email,
+            user.password,
+            user.first_name,
+            user.last_name,
+            user.phone,
+            user.role
+        ]
+        pool.query(insertQuery, values, (err, res) => {
+            if (err) {
+                console.error("Error inserting user into table", err)
+                return
+            }
+
+            console.log(`${user.first_name + " " + user.last_name} added successfully.`)
+        });
+    })
+}
+
+const seedProductsTable = async () => {
+    productsData.forEach((product) => {
+        const insertQuery = `INSERT INTO products (title, description, url_slug, season, status, category) VALUES ($1, $2, $3, $4, $5, $6);`
+        const values = [
+            product.title,
+            product.description,
+            product.url_slug,
+            product.season,
+            product.status,
+            product.category
+        ]
+        pool.query(insertQuery, values, (err, res) => {
+            if (err) {
+                console.error("Error inserting product into table", err)
+                return
+            }
+
+            console.log(`${product.title} added successfully.`)
+        });
+    })
+}
+
+const seedProductVariantTable = async () => {
+    productVariantsData.forEach((productVariant) => {
+        const insertQuery = `INSERT INTO product_variants (product_id, image_url, size, color, price, length_cm, width_cm, height_cm, weight_kg, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`
+        const values = [
+            productVariant.product_id,
+            productVariant.image_url,
+            productVariant.size, 
+            productVariant.color,
+            productVariant.price,
+            productVariant.length_cm,
+            productVariant.width_cm,
+            productVariant.height_cm,
+            productVariant.weight_kg,
+            productVariant.stock_quantity
+        ]
+
+        pool.query(insertQuery, values, (err, res) => {
+            if (err) {
+                console.error("Error inserting product variant into table", err)
+                return
+            }
+
+            console.log(`product variant added successfully.`)
+        });
+    })
+}
+
+await seedUsersTable();
+await seedProductsTable();
+await seedProductVariantTable();
