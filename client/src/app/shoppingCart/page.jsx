@@ -126,9 +126,9 @@ export default function ShoppingCartPage() {
             <span>${total.toFixed(2)}</span>
           </div>
 
-          <button className="collection-button cart-checkout-btn" disabled>
-            CHECKOUT (COMING SOON)
-          </button>
+          <Link to="/checkout" className="collection-button cart-checkout-btn">
+            PROCEED TO CHECKOUT
+          </Link>
 
           <Link to="/collections" className="cart-continue">
             ← Continue shopping

@@ -1,0 +1,373 @@
+Software System
+ 
+User Acceptance Test
+ 
+ 
+Team MKJJA
+CSC430 Software Engineering
+November 25, 2025
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+1 Introduction
+ 
+This User Acceptance Test document describes the testing setup, sample data, and the steps used to check whether the Jerry’s Streetwear application meets the agreed upon requirements. The purpose of UAT is to make sure the website works the way the users expect before it goes live. During this process, testers follow planned steps, record their results, and decide if the system should be accepted as-is or if some changes are needed before the release. This report is meant for the UAT team, the development group, and anyone involved in reviewing the results.
+ 
+2 Test Environment
+ 
+All testing was done in a controlled environment that is separate from the production version of the site. The frontend ran on a local Vite development server using React, while the backend used a Node.js and Express server connected to a PostgreSQL test database hosted on Render. Supabase test keys were used for login and authentication. This environment allowed us to control the data, reset the database when needed, and repeat tests under the same conditions. The setup is similar to what the production system will use, so the results are reliable.
+ 
+3 Test Data Set
+ 
+The test data included a mix of sample users, products, and orders that represent normal activity on the website. We prepared test users with and without saved addresses to check different checkout paths. Products included drop items, seasonal pieces, and regular basics so we could test all catalog types. Each product had several variants to confirm that size and stock updates behaved correctly. The dataset also included sample orders and shipments to test the order-tracking. All test data could be reset so results were consistent across multiple runs.
+ 
+4 Exception Report
+ 
+When anything unexpected happened during testing, the tester filled out an exception report. Each report included the date, the tester’s name, the test case and script number, the data used, and a clear explanation of the issue. These reports help the team understand what went wrong and whether the problem needs to be fixed before moving forward.
+ 
+5 UAT Test Result Review
+ 
+After we finished running all the tests, our group went through the results together and compared what happened to what we expected. We reviewed each test script, talked through any issues that showed up, and checked the exception reports to make sure we understood why certain problems happened. As a group, we agreed on which parts of the system worked well and which parts still need fixes before we consider the project “complete.” At the end of the review, we wrote a short summary of our findings and agreed on whether the system is acceptable in its current state or if changes are needed first. 
+6 UAT Test Cases and Test Scripts
+ 
+6.1 Test Cases
+ 
+1. User Signup
+This test confirms that users can sign up with valid email and password allowing access to checkout page.
+ 
+2. User Login/Logout
+This test confirms that users can sign in with valid credentials and that invalid login attempts are handled correctly and also allows users to logout.
+ 
+3. Browse and View Collections
+This test checks whether seasonal, drop, and basic product collections load properly and show accurate information.
+ 
+4. Add Item to Cart and Update Cart
+This test checks that cart features work as expected, including adding items, updating quantities, and removing items.
+ 
+5. Checkout and Order Placement
+This test makes sure users can place an order, including entering an address, verifying totals, and receiving a confirmation number.
+ 
+6. Track Order
+This test checks whether entering an order number returns the correct shipment status.
+ 
+6.2 Test Script
+ 
+For each test case has a number of test scripts that describes the exact actions that a UAT tester should perform in steps during the test for that particular test case.  It provides a rigorous format for recording test results.
+ 
+TEST SCRIPT:  1.01 (Valid Sign Up)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User enters valid email and password and clicks “signup”.
+System records new users’ information for future authentication when logging in.
+ 
+ 
+Signs users up well.
+ 
+ 
+TEST SCRIPT:  2.01 (Valid User Log In)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User enters valid email and password and clicks “Login”.
+System logs the user in and loads homepage after authenticating user in Supabase.
+ 
+ 
+Login worked well.
+ 
+
+TEST SCRIPT:  2.02 (Invalid Log In)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User enters incorrect credentials.
+ 
+System shows an error saying login is invalid.
+ 
+ 
+ 
+Error message showed right away which is ideal.
+ 
+ 
+ 
+TEST SCRIPT:  2.03 (Rest Log In Form)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User clicks “Clear”.
+ 
+The text fields become empty allowing users to restart.
+ 
+ 
+Resets implemented correctly.
+ 
+ 
+ 
+ 
+TEST SCRIPT:  2.05 (Exit Log In)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User clicks “Logout” button in Navbar.
+The system logs out user and are sent back to the login page.
+ 
+ 
+Routing is implanted correctly.
+ 
+ 
+TEST SCRIPT:  3.01 (Browse Seasonal Collection)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User opens the Seasonal Collection Page by clicking “Collections”.
+ 
+All seasonal items load with names, images, and prices.
+ 
+ 
+ 
+Everything is displayed as intended.
+ 
+ 
+TEST SCRIPT:  4.01 (Add Item to Cart)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User selects a size and clicks “Add to Cart”.
+ 
+Item will appear in users cart with size, quantity, and price.
+ 
+ 
+ 
+Items are added correctly.
+ 
+TEST SCRIPT:  4.02 (Update Cart Quantity)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User changes quantity from 1 to 5 by either entering desired number or by clicking “+” sign.
+ 
+Total price is updated correctly.
+ 
+ 
+ 
+Price recalculated as expected.
+ 
+TEST SCRIPT:  4.03 (Remove Item from Cart)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User removes an item by clicking delete button.
+ 
+Item disappears from the cart and total price is updated.
+ 
+ 
+ 
+Price recalculated as expected and cart updated immediately.
+ 
+TEST SCRIPT:  5.01 (Place Order Successfully)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+Users enter address and clicks “Place Order”.
+ 
+System creates the order and shows a confirmation number.
+ 
+ 
+ 
+Order number generated: JRY-2025-14218.
+ 
+TEST SCRIPT:  5.02 (Place Order with Invalid Address)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User tries to checkout without entering an address or an invalid address.
+ 
+System should prevent checkout till issue is fixed.
+ 
+ 
+ 
+Order still got processed.
+ 
+ 
+TEST SCRIPT:  6.01 (Track Valid Order)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User enters order number JRY-2025-14218.
+ 
+Shipment status is displayed and expected wait time.
+ 
+ 
+ 
+Status shows “order placed”.
+ 
+TEST SCRIPT:  6.02 (Track Invalid Order)
+
+Action Step
+
+Test Action
+
+Expected Results
+Meets Expected
+Yes          No
+
+Comments
+
+1
+
+User enters an invalid order number.
+ 
+System shows “Order Not Found”
+ 
+ 
+ 
+Handled Correctly.
+ 
+7. Exception Report
+ 
+Exception Report 1:
+Test Date and Time: 11/26/2025 at 6:34 pm
+Tester: Mubarak
+Script: 4.02 (Update Cart Quantity)
+Data: Product ID 18, qty 1 → 5
+Issue: The cart total successfully updated, but the cart icon in the Navbar didn’t, it still showed “1”.
+Exception Description: Cart icon didn’t refresh with the new quantity.
+
+ 
+Exception Report 2:
+Test Date and Time: 11/26/2025 at 8:12 pm
+Tester: Jolie
+Script: 5.02 (Place Order with Invalid Address)
+Data: No address entered
+Issue: Order still went through and created an order number.
+Exception Description: Address validation failed. This appeared even though no address was entered:
+“Order Placed Successfully! 📦🚚 Order ID: JRY-2025-14220”
+ 
+ 

@@ -1,13 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function TrackOrderPage() {
+  const [searchParams] = useSearchParams();
   const [orderNumber, setOrderNumber] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [order, setOrder] = useState(null);
+  const [error, setError] = useState("");
+
+  // Check if there's an order number in the URL
+  useEffect(() => {
+    const urlOrderNumber = searchParams.get("order");
+    if (urlOrderNumber) {
+      setOrderNumber(urlOrderNumber);
+      searchOrder(urlOrderNumber);
+    }
+  }, [searchParams]);
+
+  const searchOrder = (orderNum) => {
+    setError("");
+    setOrder(null);
+    setHasSearched(true);
+
+    // Search in localStorage
+    const orders = JSON.parse(localStorage.getItem("jerry_orders") || "[]");
+    const foundOrder = orders.find(
+      (o) => o.orderNumber.toLowerCase() === orderNum.toLowerCase()
+    );
+
+    if (foundOrder) {
+      setOrder(foundOrder);
+    } else {
+      setError("Order Not Found");
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!orderNumber.trim()) return;
-    setHasSearched(true);
+    searchOrder(orderNumber.trim());
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Pending";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const getStatusBadgeClass = (status) => {
+    switch (status?.toLowerCase()) {
+      case "delivered":
+        return "delivered";
+      case "shipped":
+      case "in-transit":
+        return "in-transit";
+      case "processing":
+        return "processing";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -32,92 +90,111 @@ export default function TrackOrderPage() {
           </form>
         </div>
 
-        {/* RESULTS */}
-        {hasSearched && (
+        {/* ERROR STATE - Order Not Found */}
+        {hasSearched && error && (
+          <div className="track-order-status active track-error">
+            <div className="track-error-content">
+              <div className="track-error-icon">❌</div>
+              <h2>Order Not Found</h2>
+              <p>
+                We couldn&apos;t find an order with the number{" "}
+                <strong>{orderNumber}</strong>.
+              </p>
+              <p className="track-error-hint">
+                Please check your order number and try again. Order numbers
+                start with &quot;JRY-&quot; followed by the year and a unique
+                ID.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* RESULTS - Order Found */}
+        {hasSearched && order && (
           <div className="track-order-status active">
             {/* HEADER */}
             <div className="track-order-header">
               <div className="track-order-info">
                 <h2>Order Details</h2>
                 <div className="track-order-number">
-                  Order #<span>{orderNumber}</span>
+                  Order #<span>{order.orderNumber}</span>
                 </div>
                 <div className="track-order-date">
-                  Placed on <span>October 20, 2025</span>
+                  Placed on <span>{formatDate(order.placedAt)}</span>
                 </div>
               </div>
-              <div className="track-status-badge in-transit">In Transit</div>
+              <div
+                className={`track-status-badge ${getStatusBadgeClass(
+                  order.status
+                )}`}
+              >
+                {order.status === "processing"
+                  ? "Order Placed"
+                  : order.status?.charAt(0).toUpperCase() +
+                    order.status?.slice(1)}
+              </div>
             </div>
 
             {/* TIMELINE */}
             <div className="track-shipping-timeline">
               <div className="track-timeline-title">Shipping Timeline</div>
               <div className="track-timeline">
-                <div className="track-timeline-item completed">
-                  <div className="track-timeline-content">
-                    <h3>Order Placed</h3>
-                    <div className="date">October 20, 2025 - 2:14 PM</div>
-                    <div className="location">Order confirmed</div>
-                  </div>
-                </div>
-
-                <div className="track-timeline-item completed">
-                  <div className="track-timeline-content">
-                    <h3>Processing</h3>
-                    <div className="date">October 20, 2025 - 5:02 PM</div>
-                    <div className="location">
-                      Jerry&apos;s Warehouse, Los Angeles, CA
+                {order.timeline?.map((step, index) => (
+                  <div
+                    key={index}
+                    className={`track-timeline-item ${
+                      step.completed ? "completed" : ""
+                    } ${step.current ? "current" : ""}`}
+                  >
+                    <div className="track-timeline-content">
+                      <h3>{step.status}</h3>
+                      <div className="date">{formatDate(step.date)}</div>
+                      <div className="location">{step.location}</div>
                     </div>
                   </div>
-                </div>
-
-                <div className="track-timeline-item current">
-                  <div className="track-timeline-content">
-                    <h3>In Transit</h3>
-                    <div className="date">October 22, 2025 - 8:31 AM</div>
-                    <div className="location">In transit to next facility</div>
-                  </div>
-                </div>
-
-                <div className="track-timeline-item">
-                  <div className="track-timeline-content">
-                    <h3>Out for Delivery</h3>
-                    <div className="date">Pending</div>
-                    <div className="location">
-                      Your local carrier facility
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* TRACKING INFO BOX */}
+            {/* ORDER ITEMS */}
+            <div className="track-order-items">
+              <h3>Items in Your Order</h3>
+              {order.items?.map((item, index) => (
+                <div key={index} className="track-item">
+                  <div className="track-item-image">🧥</div>
+                  <div className="track-item-details">
+                    <h4>{item.name}</h4>
+                    <div className="track-item-meta">Qty: {item.quantity}</div>
+                    <div className="track-item-price">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* SHIPPING ADDRESS */}
+            {order.address && (
+              <div className="track-tracking-info">
+                <h3>Shipping Address</h3>
+                <div className="track-address">
+                  <p>
+                    {order.address.firstName} {order.address.lastName}
+                  </p>
+                  <p>{order.address.address}</p>
+                  <p>
+                    {order.address.city}, {order.address.state}{" "}
+                    {order.address.zip}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* TOTAL */}
             <div className="track-tracking-info">
-              <h3>Tracking Information</h3>
-              <div className="track-tracking-grid">
-                <div className="track-tracking-item">
-                  <label>Carrier</label>
-                  <span>USPS Priority Mail</span>
-                </div>
-                <div className="track-tracking-item">
-                  <label>Tracking Number</label>
-                  <span>9405 5118 9956 XXXX XXXX</span>
-                </div>
-                <div className="track-tracking-item">
-                  <label>Estimated Delivery</label>
-                  <span>October 25, 2025</span>
-                </div>
-                <div className="track-tracking-item">
-                  <label>View on Carrier Site</label>
-                  <a
-                    href="https://tools.usps.com/go/TrackConfirmAction"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="track-tracking-link"
-                  >
-                    Track with USPS →
-                  </a>
-                </div>
+              <h3>Order Total</h3>
+              <div className="track-order-total">
+                <strong>${order.total?.toFixed(2)}</strong>
               </div>
             </div>
           </div>

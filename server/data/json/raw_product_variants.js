@@ -467,6 +467,5 @@ const productVariantsData = [
     "weight_kg": 0.48,
     "stock_quantity": 30
   }
-];
-
+]
 export default productVariantsData;

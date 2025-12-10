@@ -1,47 +1,47 @@
 const productsData = [
   {
-    "title": "Classic T-Shirt",
-    "description": "A comfortable 100% cotton t-shirt.",
-    "url_slug": "classic-t-shirt",
+    "title": "Heavyweight T-Shirt",
+    "description": "Premium heavyweight cotton t-shirt with classic fit.",
+    "url_slug": "heavyweight-t-shirt",
     "season": "All-Season",
     "status": "active",
-    "category": "Apparel"
+    "category": "Tops"
   },
   {
-    "title": "Denim Jeans",
-    "description": "Stylish and durable blue denim jeans.",
-    "url_slug": "denim-jeans",
-    "season": "Fall",
+    "title": "Slim Fit Jeans",
+    "description": "Modern slim fit denim jeans with stretch comfort.",
+    "url_slug": "slim-fit-jeans",
+    "season": "All-Season",
     "status": "active",
-    "category": "Apparel"
+    "category": "Bottoms"
   },
   {
-    "title": "Vintage Hoodie",
-    "description": "A very old hoodie.",
-    "url_slug": "vintage-hoodie",
+    "title": "Classic Hoodie",
+    "description": "Comfortable pullover hoodie with kangaroo pocket.",
+    "url_slug": "classic-hoodie",
     "season": "Winter",
     "status": "archived",
-    "category": "Apparel"
+    "category": "Outerwear"
   },
   {
-    "title": "Summer Shorts",
-    "description": "Bright yellow shorts.",
-    "url_slug": "summer-shorts",
+    "title": "Linen Shorts",
+    "description": "Lightweight linen shorts perfect for warm weather.",
+    "url_slug": "linen-shorts",
     "season": "Summer",
     "status": "discontinued",
-    "category": "Apparel"
+    "category": "Bottoms"
   },
   {
     "title": "Denim Jacket",
-    "description": "A stylish denim jacket.",
+    "description": "Classic denim jacket with timeless style.",
     "url_slug": "denim-jacket",
     "season": "Fall",
     "status": "active",
-    "category": "Apparel"
+    "category": "Outerwear"
   },
   {
     "title": "Running Sneakers",
-    "description": "Lightweight running sneakers with excellent cushioning.",
+    "description": "Lightweight running sneakers with cushioned sole.",
     "url_slug": "running-sneakers",
     "season": "All-Season",
     "status": "active",
@@ -49,16 +49,16 @@ const productsData = [
   },
   {
     "title": "Leather Boots",
-    "description": "Durable leather boots perfect for winter.",
+    "description": "Durable leather boots with classic styling.",
     "url_slug": "leather-boots",
     "season": "Winter",
     "status": "active",
     "category": "Footwear"
   },
   {
-    "title": "Cotton Socks",
-    "description": "Comfortable cotton socks in various colors.",
-    "url_slug": "cotton-socks",
+    "title": "Cotton Crew Socks",
+    "description": "Comfortable cotton crew socks in pack of 3.",
+    "url_slug": "cotton-crew-socks",
     "season": "All-Season",
     "status": "active",
     "category": "Accessories"
@@ -72,36 +72,36 @@ const productsData = [
     "category": "Accessories"
   },
   {
-    "title": "Winter Scarf",
-    "description": "Warm wool scarf in multiple patterns.",
-    "url_slug": "winter-scarf",
+    "title": "Wool Scarf",
+    "description": "Warm wool scarf in various patterns.",
+    "url_slug": "wool-scarf",
     "season": "Winter",
     "status": "active",
     "category": "Accessories"
   },
   {
-    "title": "Yoga Pants",
-    "description": "Stretchy and comfortable yoga pants.",
-    "url_slug": "yoga-pants",
+    "title": "Yoga Leggings",
+    "description": "High-waisted yoga leggings with moisture-wicking.",
+    "url_slug": "yoga-leggings",
     "season": "All-Season",
     "status": "active",
-    "category": "Apparel"
+    "category": "Activewear"
   },
   {
     "title": "Tank Top",
-    "description": "Breathable tank top for workouts.",
+    "description": "Breathable tank top for workouts and casual wear.",
     "url_slug": "tank-top",
     "season": "Summer",
     "status": "active",
-    "category": "Apparel"
+    "category": "Tops"
   },
   {
     "title": "Flannel Shirt",
-    "description": "Classic plaid flannel shirt.",
+    "description": "Classic plaid flannel shirt with button front.",
     "url_slug": "flannel-shirt",
     "season": "Fall",
     "status": "active",
-    "category": "Apparel"
+    "category": "Tops"
   },
   {
     "title": "Cargo Pants",
@@ -109,7 +109,7 @@ const productsData = [
     "url_slug": "cargo-pants",
     "season": "All-Season",
     "status": "active",
-    "category": "Apparel"
+    "category": "Bottoms"
   },
   {
     "title": "Puffer Vest",
@@ -117,7 +117,8 @@ const productsData = [
     "url_slug": "puffer-vest",
     "season": "Fall",
     "status": "active",
-    "category": "Apparel"
+    "category": "Outerwear"
   }
-]
+];
+
 export default productsData;
