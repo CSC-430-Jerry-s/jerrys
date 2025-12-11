@@ -332,55 +332,117 @@ const seedUsersTable = async () => {
     })
 }
 
-const seedProductsTable = async () => {
-    productsData.forEach((product) => {
-        const insertQuery = `INSERT INTO products (title, description, url_slug, season, status, category) VALUES ($1, $2, $3, $4, $5, $6);`
-        const values = [
-            product.title,
-            product.description,
-            product.url_slug,
-            product.season,
-            product.status,
-            product.category
-        ]
-        pool.query(insertQuery, values, (err, res) => {
-            if (err) {
-                console.error("Error inserting product into table", err)
-                return
-            }
+// const seedProductsTable = async () => {
+//     await pool.query("DELETE FROM products;")
+//     productsData.forEach((product) => {
+//         const insertQuery = `INSERT INTO products (title, description, url_slug, season, status, category) VALUES ($1, $2, $3, $4, $5, $6);`
+//         const values = [
+//             product.title,
+//             product.description,
+//             product.url_slug,
+//             product.season,
+//             product.status,
+//             product.category
+//         ]
+//         pool.query(insertQuery, values, (err, res) => {
+//             if (err) {
+//                 console.error("Error inserting product into table", err)
+//                 return
+//             }
 
-            console.log(`${product.title} added successfully.`)
-        });
-    })
+//             console.log(`${product.title} added successfully.`)
+//         });
+//     })
+// }
+
+// const seedProductVariantTable = async () => {
+//     await pool.query("DELETE FROM product_variants;")
+//     productVariantsData.forEach((productVariant) => {
+//         const insertQuery = `INSERT INTO product_variants (product_id, image_url, size, color, price, length_cm, width_cm, height_cm, weight_kg, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`
+//         const values = [
+//             productVariant.product_id,
+//             productVariant.image_url,
+//             productVariant.size, 
+//             productVariant.color,
+//             productVariant.price,
+//             productVariant.length_cm,
+//             productVariant.width_cm,
+//             productVariant.height_cm,
+//             productVariant.weight_kg,
+//             productVariant.stock_quantity
+//         ]
+
+//         pool.query(insertQuery, values, (err, res) => {
+//             if (err) {
+//                 console.error("Error inserting product variant into table", err)
+//                 return
+//             }
+
+//             console.log(`product variant added successfully.`)
+//         });
+//     })
+// }
+
+// await seedUsersTable();
+
+const seedProductsTable = async () => {
+    try {
+        await pool.query("TRUNCATE products CASCADE;");
+        console.log('Products table cleared');
+        
+        for (const product of productsData) {
+            const insertQuery = `INSERT INTO products (title, description, url_slug, season, status, category) VALUES ($1, $2, $3, $4, $5, $6);`;
+            await pool.query(insertQuery, [
+                product.title,
+                product.description,
+                product.url_slug,
+                product.season,
+                product.status,
+                product.category
+            ]);
+            console.log(`${product.title} added successfully.`);
+        }
+    } catch (err) {
+        console.error("Error seeding products:", err);
+    }
 }
 
 const seedProductVariantTable = async () => {
-    productVariantsData.forEach((productVariant) => {
-        const insertQuery = `INSERT INTO product_variants (product_id, image_url, size, color, price, length_cm, width_cm, height_cm, weight_kg, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`
-        const values = [
-            productVariant.product_id,
-            productVariant.image_url,
-            productVariant.size, 
-            productVariant.color,
-            productVariant.price,
-            productVariant.length_cm,
-            productVariant.width_cm,
-            productVariant.height_cm,
-            productVariant.weight_kg,
-            productVariant.stock_quantity
-        ]
-
-        pool.query(insertQuery, values, (err, res) => {
-            if (err) {
-                console.error("Error inserting product variant into table", err)
-                return
-            }
-
-            console.log(`product variant added successfully.`)
-        });
-    })
+    try {
+        for (const productVariant of productVariantsData) {
+            const insertQuery = `INSERT INTO product_variants (product_id, image_url, size, color, price, length_cm, width_cm, height_cm, weight_kg, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`;
+            await pool.query(insertQuery, [
+                productVariant.product_id,
+                productVariant.image_url,
+                productVariant.size, 
+                productVariant.color,
+                productVariant.price,
+                productVariant.length_cm,
+                productVariant.width_cm,
+                productVariant.height_cm,
+                productVariant.weight_kg,
+                productVariant.stock_quantity
+            ]);
+            console.log(`Product variant added successfully.`);
+        }
+    } catch (err) {
+        console.error("Error seeding product variants:", err);
+    }
 }
 
-await seedUsersTable();
-await seedProductsTable();
-await seedProductVariantTable();
+// At the end of the file:
+// (async () => {
+//     try {
+//         await seedProductsTable();      // Waits until ALL products inserted
+//         await seedProductVariantTable(); // THEN inserts variants
+//         console.log('Database seeding complete! ✅');
+//         await pool.end();
+//     } catch (err) {
+//         console.error('Seeding error:', err);
+//         await pool.end();
+//     }
+// })();
+
+const x = await pool.query("SELECT * FROM users;")
+
+console.log(x)
