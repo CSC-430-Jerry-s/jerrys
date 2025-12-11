@@ -42,7 +42,6 @@ Follow these steps to set up the project locally and test the features.
 ```bash
 git clone https://github.com/CSC-430-Jerry-s/jerrys.git
 cd jerrys
-git checkout develop
 ```
 
 ### 2. Install Dependencies
